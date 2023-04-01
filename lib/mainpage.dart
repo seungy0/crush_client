@@ -25,7 +25,7 @@ class _MainpageState extends State<Mainpage> {
     ),
   ];
   List<Widget> pages =
-  [  CoodinatorPage(),  ClosetPage(),  MyPage(),];
+  [ CoodinatorPage(),  ClosetPage(),  MyPage(),];
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class _MainpageState extends State<Mainpage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.grey,
-        selectedItemColor: Colors.lightBlue,
-        unselectedItemColor: Colors.lightBlueAccent,
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.blue,
         selectedFontSize: 14,
         unselectedFontSize: 14,
         currentIndex: _selectedIndex,
