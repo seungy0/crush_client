@@ -11,15 +11,15 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   int _selectedIndex = 0;
   List<BottomNavigationBarItem> bottomItems=[
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       icon: Icon(Icons.checkroom_outlined),
       label: '코디네이터',
     ),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       icon: Icon(Icons.checkroom_outlined),
       label: '나의 옷장',
     ),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
       icon: Icon(Icons.checkroom_outlined),
       label: '마이 페이지',
     ),

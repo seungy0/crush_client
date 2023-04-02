@@ -11,7 +11,7 @@ class _CoodinatorPageState extends State<CoodinatorPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
+      child: const Center(
         child: Text('코디네이터'),
       ),
     );

@@ -36,14 +36,14 @@ class _ClothInputState extends State<ClothInput> {
       appBar: AppBar(
         backgroundColor: Colors.grey,
         foregroundColor: Colors.blueAccent,
-        title: Text('새 옷 등록',style: TextStyle(fontWeight:FontWeight.bold),),
+        title: const Text('새 옷 등록',style: TextStyle(fontWeight:FontWeight.bold),),
       ),
       body: Container(
         child: Form(
           key: this.ClothKey,
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
                   renderTextFormField(
@@ -124,8 +124,8 @@ class _ClothInputState extends State<ClothInput> {
         if (this.ClothKey.currentState!.validate()) {
           this.ClothKey.currentState!.save();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('옷이 등록되었습니다.'),
+            const SnackBar(
+              content: const Text('옷이 등록되었습니다.'),
             ),
           );
           final Closet = prefs.getStringList('Closet');
@@ -135,7 +135,7 @@ class _ClothInputState extends State<ClothInput> {
           }
         }
       },
-      child: Text(
+      child: const Text(
         '추가',
         style: TextStyle(
           color: Colors.blueAccent,
@@ -158,7 +158,7 @@ class _ClothInputState extends State<ClothInput> {
           children: [
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12.0,
                 fontWeight: FontWeight.w700,
               ),

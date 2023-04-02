@@ -15,7 +15,7 @@ class _ClosetPageState extends State<ClosetPage> {
       appBar: AppBar(
         backgroundColor: Colors.grey,
         foregroundColor: Colors.blueAccent,
-        title: Text('나의 옷장',style: TextStyle(fontWeight:FontWeight.bold),),
+        title: const Text('나의 옷장',style: TextStyle(fontWeight:FontWeight.bold),),
       ),
       body: Center(
           child: ElevatedButton(
@@ -26,7 +26,7 @@ class _ClosetPageState extends State<ClosetPage> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.add),
