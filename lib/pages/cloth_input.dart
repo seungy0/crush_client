@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClothInput extends StatefulWidget {
 
@@ -12,6 +13,22 @@ class _ClothInputState extends State<ClothInput> {
   String color = '';
   String type = '';
   String thickness = '';
+  late SharedPreferences prefs;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final Closet = prefs.getStringList('Closet');
+    if (Closet != null) {
+      } else {
+      await prefs.setStringList('Closet', []);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +128,11 @@ class _ClothInputState extends State<ClothInput> {
               content: Text('옷이 등록되었습니다.'),
             ),
           );
+          final Closet = prefs.getStringList('Closet');
+          if(Closet!=null){
+          Closet.add('name: $name, color: $color, type: $type, thickness: $thickness');
+          await prefs.setStringList('Closet', Closet);
+          }
         }
       },
       child: Text(
