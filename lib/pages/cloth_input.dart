@@ -19,7 +19,7 @@ class _ClothInputState extends State<ClothInput> {
     prefs = await SharedPreferences.getInstance();
     final Closet = prefs.getStringList('Closet');
     if (Closet != null) {
-      } else {
+    } else {
       await prefs.setStringList('Closet', []);
     }
   }
@@ -50,9 +50,9 @@ class _ClothInputState extends State<ClothInput> {
                     label: '옷 이름',
                     onSaved: (val) {
                       setState(() {
-                      this.name = val;
+                        this.name = val;
                       });
-                      },
+                    },
                     validator: (val) {
                       if(val.length < 1) {
                         return '이름은 필수사항입니다.';
@@ -110,9 +110,9 @@ class _ClothInputState extends State<ClothInput> {
               ),
             ),
           ),
-          ),
         ),
-      );
+      ),
+    );
   }
 
   renderButton() {
@@ -130,8 +130,8 @@ class _ClothInputState extends State<ClothInput> {
           );
           final Closet = prefs.getStringList('Closet');
           if(Closet!=null){
-          Closet.add('name: $name, color: $color, type: $type, thickness: $thickness');
-          await prefs.setStringList('Closet', Closet);
+            Closet.add('{"name": "$name", "color": "$color", "type": "$type", "thickness": "$thickness"}');
+            await prefs.setStringList('Closet', Closet);
           }
         }
       },
@@ -175,4 +175,3 @@ class _ClothInputState extends State<ClothInput> {
   }
 
 }
-

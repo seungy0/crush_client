@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:crush_client/pages/cloth_input.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClosetPage extends StatefulWidget{
   @override
   State<ClosetPage> createState() => _ClosetPageState();
 }
 
-
 @override
 class _ClosetPageState extends State<ClosetPage> {
+  late SharedPreferences prefs;
+  List<String>? Closet;
+
+  Future<void> initCloset() async {
+    prefs = await SharedPreferences.getInstance();
+    Closet = prefs.getStringList('Closet');
+  }
+
   @override
   Widget build(BuildContext context) {
+    initCloset();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey,
@@ -18,25 +27,31 @@ class _ClosetPageState extends State<ClosetPage> {
         title: const Text('나의 옷장',style: TextStyle(fontWeight:FontWeight.bold),),
       ),
       body: Center(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.blueAccent,
-              backgroundColor: Colors.grey,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(Closet.toString()),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.blueAccent,
+                backgroundColor: Colors.grey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
               ),
+              child: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.add),
+                  Text('새 옷 등록',style: TextStyle(fontWeight:FontWeight.bold)),
+                ],
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ClothInput()));
+              },
             ),
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add),
-                Text('새 옷 등록',style: TextStyle(fontWeight:FontWeight.bold)),
-              ],
-            ),
-            onPressed: () {
-              Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ClothInput()));
-          },
+          ],
         ),
       ),
     );
