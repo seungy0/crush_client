@@ -66,7 +66,7 @@ class _SignInWithVideoState extends State<SignInWithVideo> {
     );
   }
 
-  // Override the dipose() method to cleanup the video controller.
+  // Override the dispose() method to cleanup the video controller.
   @override
   void dispose() {
     super.dispose();
