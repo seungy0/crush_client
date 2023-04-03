@@ -1,8 +1,78 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 import 'authentication.dart';
 import 'custom_color.dart';
+
+class SignInWithVideo extends StatefulWidget {
+  const SignInWithVideo({super.key});
+
+  @override
+  _SignInWithVideoState createState() => _SignInWithVideoState();
+}
+
+class _SignInWithVideoState extends State<SignInWithVideo> {
+  // Create a VideoPlayerController object.
+  late VideoPlayerController _controller;
+  // TODO: web bug fix
+  // Override the initState() method and setup your VideoPlayerController
+  @override
+  void initState() {
+    super.initState();
+    // Pointing the video controller to our local asset.
+    _controller = VideoPlayerController.asset("assets/sample_video.mp4")
+      ..initialize().then((_) {
+        // Once the video has been loaded we play the video and set looping to true.
+        _controller.play();
+        _controller.setLooping(true);
+        // Ensure the first frame is shown after the video is initialized.
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        // Adjusted theme colors to match logo.
+        primaryColor: const Color(0xffb55e28),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: const Color(0xffffd544)),
+      ),
+      home: SafeArea(
+        child: Scaffold(
+          // Create a Stack Widget
+          body: Stack(
+            children: <Widget>[
+              // Add a SizedBox to contain our video.
+              SizedBox.expand(
+                child: FittedBox(
+                  // If your background video doesn't look right, try changing the BoxFit property.
+                  // BoxFit.fill created the look I was going for.
+                  fit: BoxFit.fill,
+                  child: SizedBox(
+                    width: _controller.value.size?.width ?? 0,
+                    height: _controller.value.size?.height ?? 0,
+                    child: VideoPlayer(_controller),
+                  ),
+                ),
+              ),
+              const SignInScreen()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Override the dipose() method to cleanup the video controller.
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+}
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -14,68 +84,28 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomColors.firebaseNavy,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            bottom: 20.0,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Image.asset(
-                        'assets/firebase_logo.png',
-                        height: 160,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'FlutterFire',
-                      style: TextStyle(
-                        color: CustomColors.firebaseYellow,
-                        fontSize: 40,
-                      ),
-                    ),
-                    Text(
-                      'Authentication',
-                      style: TextStyle(
-                        color: CustomColors.firebaseOrange,
-                        fontSize: 40,
-                      ),
-                    ),
-                  ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Row(),
+        Center(
+          child: FutureBuilder(
+            future: Authentication.initializeFirebase(context: context),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Error initializing Firebase');
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return const GoogleSignInButton();
+              }
+              return CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  CustomColors.firebaseOrange,
                 ),
-              ),
-              FutureBuilder(
-                future: Authentication.initializeFirebase(context: context),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Error initializing Firebase');
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    return const GoogleSignInButton();
-                  }
-                  return CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      CustomColors.firebaseOrange,
-                    ),
-                  );
-                },
-              ),
-            ],
+              );
+            },
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -177,7 +207,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          const SignInScreen(),
+          const SignInWithVideo(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = const Offset(-1.0, 0.0);
         var end = Offset.zero;
