@@ -14,7 +14,13 @@ class _ClosetPageState extends State<ClosetPage> {
 
   Future<void> initCloset() async {
     prefs = await SharedPreferences.getInstance();
-    Closet = prefs.getStringList('Closet');
+    setState(() {
+      Closet = prefs.getStringList('Closet');
+    });
+  }
+  void initState() {
+    super.initState();
+    initCloset();
   }
 
   @override
