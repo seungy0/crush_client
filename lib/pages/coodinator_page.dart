@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-class CoodinatorPage extends StatefulWidget{
+class CoodinatorPage extends StatefulWidget {
   @override
   State<CoodinatorPage> createState() => _CoodinatorPageState();
 }
-
 
 @override
 class _CoodinatorPageState extends State<CoodinatorPage> {

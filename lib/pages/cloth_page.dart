@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:crush_client/pages/cloth_input.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ClosetPage extends StatefulWidget{
+class ClosetPage extends StatefulWidget {
   @override
   State<ClosetPage> createState() => _ClosetPageState();
 }
@@ -18,6 +18,7 @@ class _ClosetPageState extends State<ClosetPage> {
       Closet = prefs.getStringList('Closet');
     });
   }
+
   void initState() {
     super.initState();
     initCloset();
@@ -30,7 +31,10 @@ class _ClosetPageState extends State<ClosetPage> {
       appBar: AppBar(
         backgroundColor: Colors.grey,
         foregroundColor: Colors.blueAccent,
-        title: const Text('나의 옷장',style: TextStyle(fontWeight:FontWeight.bold),),
+        title: const Text(
+          '나의 옷장',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Center(
         child: Column(
@@ -45,11 +49,11 @@ class _ClosetPageState extends State<ClosetPage> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Column(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: const [
                   Icon(Icons.add),
-                  Text('새 옷 등록',style: TextStyle(fontWeight:FontWeight.bold)),
+                  Text('새 옷 등록', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
               onPressed: () {

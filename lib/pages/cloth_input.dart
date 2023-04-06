@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClothInput extends StatefulWidget {
-
   @override
   _ClothInputState createState() => _ClothInputState();
 }
 
 class _ClothInputState extends State<ClothInput> {
-  final ClothKey= GlobalKey<FormState>();
+  final ClothKey = GlobalKey<FormState>();
   String name = '';
   String color = '';
   String type = '';
@@ -36,7 +35,10 @@ class _ClothInputState extends State<ClothInput> {
       appBar: AppBar(
         backgroundColor: Colors.grey,
         foregroundColor: Colors.blueAccent,
-        title: const Text('새 옷 등록',style: TextStyle(fontWeight:FontWeight.bold),),
+        title: const Text(
+          '새 옷 등록',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Container(
         child: Form(
@@ -54,10 +56,10 @@ class _ClothInputState extends State<ClothInput> {
                       });
                     },
                     validator: (val) {
-                      if(val.length < 1) {
+                      if (val.length < 1) {
                         return '이름은 필수사항입니다.';
                       }
-                      if(val.length < 2) {
+                      if (val.length < 2) {
                         return '이름은 두글자 이상 입력 해주셔야합니다.';
                       }
                       return null;
@@ -71,7 +73,7 @@ class _ClothInputState extends State<ClothInput> {
                       });
                     },
                     validator: (val) {
-                      if(val.length < 1) {
+                      if (val.length < 1) {
                         return '색깔은 필수사항입니다.';
                       }
                       return null;
@@ -85,7 +87,7 @@ class _ClothInputState extends State<ClothInput> {
                       });
                     },
                     validator: (val) {
-                      if(val.length < 1) {
+                      if (val.length < 1) {
                         return '중류는 필수사항입니다.';
                       }
                       return null;
@@ -99,7 +101,7 @@ class _ClothInputState extends State<ClothInput> {
                       });
                     },
                     validator: (val) {
-                      if(val.length < 1) {
+                      if (val.length < 1) {
                         return '두께는 필수사항입니다.';
                       }
                       return null;
@@ -117,9 +119,7 @@ class _ClothInputState extends State<ClothInput> {
 
   renderButton() {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.grey
-      ),
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
       onPressed: () async {
         if (this.ClothKey.currentState!.validate()) {
           this.ClothKey.currentState!.save();
@@ -129,8 +129,9 @@ class _ClothInputState extends State<ClothInput> {
             ),
           );
           final Closet = prefs.getStringList('Closet');
-          if(Closet!=null){
-            Closet.add('{"name": "$name", "color": "$color", "type": "$type", "thickness": "$thickness"}');
+          if (Closet != null) {
+            Closet.add(
+                '{"name": "$name", "color": "$color", "type": "$type", "thickness": "$thickness"}');
             await prefs.setStringList('Closet', Closet);
           }
         }
@@ -169,9 +170,10 @@ class _ClothInputState extends State<ClothInput> {
           onSaved: onSaved,
           validator: validator,
         ),
-        Container(height: 16.0,),
+        Container(
+          height: 16.0,
+        ),
       ],
     );
   }
-
 }

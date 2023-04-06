@@ -1,8 +1,7 @@
+import 'package:crush_client/pages/cloth_page.dart';
+import 'package:crush_client/pages/coodinator_page.dart';
 import 'package:crush_client/pages/peoples_page.dart';
 import 'package:flutter/material.dart';
-import 'package:crush_client/pages/coodinator_page.dart';
-import 'package:crush_client/pages/cloth_page.dart';
-import 'package:crush_client/pages/my_page.dart';
 
 class Mainpage extends StatefulWidget {
   @override
@@ -10,15 +9,22 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
-  List<Widget> pages =
-  [ CoodinatorPage(),  ClosetPage(),  PeoplesPage(),];
+  List<Widget> pages = [
+    CoodinatorPage(),
+    ClosetPage(),
+    PeoplesPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: TabBarView(children: [ CoodinatorPage(),  ClosetPage(),  PeoplesPage(),]),
+        body: TabBarView(children: [
+          CoodinatorPage(),
+          ClosetPage(),
+          PeoplesPage(),
+        ]),
         bottomNavigationBar: Container(
           height: 60,
           color: Colors.grey,

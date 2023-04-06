@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-class PeoplesPage extends StatefulWidget{
+class PeoplesPage extends StatefulWidget {
   @override
   State<PeoplesPage> createState() => _PeoplesPageState();
 }
-
 
 @override
 class _PeoplesPageState extends State<PeoplesPage> {
