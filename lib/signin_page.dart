@@ -1,3 +1,4 @@
+import 'package:crush_client/mainpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -153,7 +154,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   if (!mounted) return;
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => UserInfoScreen(
+                      builder: (context) => Mainpage(
                         user: user,
                       ),
                     ),

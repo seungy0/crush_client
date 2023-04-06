@@ -1,9 +1,15 @@
 import 'package:crush_client/pages/cloth_page.dart';
 import 'package:crush_client/pages/coodinator_page.dart';
 import 'package:crush_client/pages/peoples_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Mainpage extends StatefulWidget {
+  const Mainpage({Key? key, required User user})
+      : _user = user,
+        super(key: key);
+
+  final User _user;
   @override
   _MainpageState createState() => _MainpageState();
 }

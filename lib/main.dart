@@ -1,16 +1,16 @@
-import 'package:crush_client/mainpage.dart';
+import 'package:crush_client/signin_page.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const SignInWithVideo(),
+    return const MaterialApp(
+      home: SignInWithVideo(),
     );
   }
 }
