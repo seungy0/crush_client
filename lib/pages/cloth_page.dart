@@ -1,4 +1,5 @@
 import 'package:crush_client/pages/cloth_input.dart';
+import 'package:crush_client/pages/recommend_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,6 +62,12 @@ class _ClosetPageState extends State<ClosetPage> {
                     MaterialPageRoute(builder: (context) => ClothInput()));
               },
             ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => RecommendPage()));
+                },
+                child: Text("AI 코디 추천")),
           ],
         ),
       ),
