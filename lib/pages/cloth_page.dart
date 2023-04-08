@@ -1,7 +1,7 @@
 import 'package:crush_client/pages/cloth_input.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:convert';
 class ClosetPage extends StatefulWidget {
   @override
   State<ClosetPage> createState() => _ClosetPageState();
@@ -10,23 +10,33 @@ class ClosetPage extends StatefulWidget {
 @override
 class _ClosetPageState extends State<ClosetPage> {
   late SharedPreferences prefs;
-  List<String>? Closet;
+  List<String>? closet;
+  List<Cloth> clothList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    clothList= [];
+    initCloset();
+  }
 
   Future<void> initCloset() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      Closet = prefs.getStringList('Closet');
+      closet = prefs.getStringList('Closet');
+      if (closet != null) {
+        for (int i = 0; i < closet!.length; i++) {
+          final Map<String, dynamic> clothJson =
+          jsonDecode(closet![i]) as Map<String, dynamic>;
+          clothList.add(Cloth.fromJson(clothJson));
+          print(clothList[i].name);
+        }
+      }
     });
-  }
-
-  void initState() {
-    super.initState();
-    initCloset();
   }
 
   @override
   Widget build(BuildContext context) {
-    initCloset();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey,
@@ -36,33 +46,55 @@ class _ClosetPageState extends State<ClosetPage> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(Closet.toString()),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blueAccent,
-                backgroundColor: Colors.grey,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
+      body: FutureBuilder(
+        future: initCloset(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.add),
-                  Text('새 옷 등록', style: TextStyle(fontWeight: FontWeight.bold)),
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: clothList.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(clothList[index].name),
+                          subtitle: Text(clothList[index].type),
+                        );
+                      },
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.blueAccent,
+                      backgroundColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.add),
+                        Text('새 옷 등록',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ClothInput()));
+                    },
+                  ),
                 ],
               ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ClothInput()));
-              },
-            ),
-          ],
-        ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }

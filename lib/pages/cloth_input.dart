@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ClothInput extends StatefulWidget {
   @override
@@ -130,8 +131,7 @@ class _ClothInputState extends State<ClothInput> {
           );
           final Closet = prefs.getStringList('Closet');
           if (Closet != null) {
-            Closet.add(
-                '{"name": "$name", "color": "$color", "type": "$type", "thickness": "$thickness"}');
+            Closet.add(json.encode(Cloth(name: name, color: color, type: type, thickness: thickness).toJson()));
             await prefs.setStringList('Closet', Closet);
           }
         }
@@ -176,4 +176,32 @@ class _ClothInputState extends State<ClothInput> {
       ],
     );
   }
+}
+class Cloth {
+  final String name;
+  final String color;
+  final String type;
+  final String thickness;
+
+  Cloth({
+    required this.name,
+    required this.color,
+    required this.type,
+    required this.thickness,
+  });
+
+  factory Cloth.fromJson(Map<String, dynamic> json) {
+    return Cloth(
+      name: json['name']??'No Name',
+      color: json['color'],
+      type: json['type'],
+      thickness: json['thickness'],
+    );
+  }
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'color': color,
+    'type': type,
+    'thickness': thickness,
+  };
 }
