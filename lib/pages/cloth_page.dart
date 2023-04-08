@@ -2,6 +2,7 @@ import 'package:crush_client/pages/cloth_input.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:crush_client/pages/objects/cloth_object.dart';
 
 class ClosetPage extends StatefulWidget {
   @override
@@ -31,7 +32,6 @@ class _ClosetPageState extends State<ClosetPage> {
           final Map<String, dynamic> clothJson =
               jsonDecode(closet![i]) as Map<String, dynamic>;
           clothList.add(Cloth.fromJson(clothJson));
-          print(clothList[i].name);
         }
       }
       isLoaded = true;
