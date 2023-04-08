@@ -4,16 +4,34 @@ import 'package:crush_client/models/coordination_model.dart';
 import 'package:dio/dio.dart';
 
 class ApiService {
-  static const String baseUrl = "http://xxxx.xxx";
-  static const String today = "";
+  static const String baseUrl = "https://localhost";
+  static const String recommend = "recommend";
+  static const data = {
+    "cloths": [
+      {"name": "옷1", "color": "빨강", "type": "티셔츠", "thickness": "두꺼움"},
+      {"name": "자라에서 산거", "color": "파랑", "type": "바지", "thickness": "얇음"}
+    ],
+    "options": {
+      "weather": "sunny",
+      "occasion": "casual",
+      "season": "spring",
+      "style": "sporty"
+    }
+  };
 
   static Future<List<CoordinationModel>> getAiCoordination() async {
     List<CoordinationModel> coordinationInstances = [];
     final dio = Dio();
-    final response = await dio.get(baseUrl);
+    final response = await dio.post(
+      '$baseUrl/$recommend',
+      data: data,
+      options: Options(
+        contentType: 'application/json',
+      ),
+    );
     if (response.statusCode == 200) {
       final List<dynamic> aiCoordis = jsonDecode(response.data);
-      for(var aiCoordi in aiCoordis) {
+      for (var aiCoordi in aiCoordis) {
         coordinationInstances.add(CoordinationModel.fromJson(aiCoordi));
       }
       return coordinationInstances;
