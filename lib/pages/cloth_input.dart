@@ -134,6 +134,7 @@ class _ClothInputState extends State<ClothInput> {
             Closet.add(json.encode(Cloth(name: name, color: color, type: type, thickness: thickness).toJson()));
             await prefs.setStringList('Closet', Closet);
           }
+          Navigator.pop(context, true);
         }
       },
       child: const Text(
