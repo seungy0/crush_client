@@ -16,31 +16,56 @@ class RecommendPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: snapshot.data!.length,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  itemBuilder: (context, index) {
-                    var coordi = snapshot.data![index];
-                    String clothes = coordi.clothes.join(", ");
-                    return Container(
-                      child: Column(
+                Expanded(
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemBuilder: (context, index) {
+                      var coordi = snapshot.data![index];
+                      String clothes = coordi.clothes.join(", ");
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            clothes,
-                          ),
-                          Text(
-                            coordi.explanation,
-                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.black.withOpacity(0.4),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 20),
+                            width: 350,
+                            height: 500,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  clothes,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 30),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  coordi.explanation,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
                         ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 20,),
+                      );
+                    },
+                    separatorBuilder: (context, index) => SizedBox(
+                      width: 40,
+                    ),
+                  ),
                 ),
               ],
             );
