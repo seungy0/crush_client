@@ -1,0 +1,21 @@
+name: photos_repository
+description: repository that manages the photo domain
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.19.0 <3.0.0"
+
+dependencies:
+  firebase_core: ^2.4.1
+  firebase_storage: ^11.0.10
+  flutter:
+    sdk: flutter
+  image_compositor:
+    path: ../image_compositor
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^4.0.0+1
