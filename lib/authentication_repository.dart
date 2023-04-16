@@ -1,4 +1,4 @@
-import 'package:crush_client/signin_page.dart';
+import 'package:crush_client/signin/signin_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -8,31 +8,37 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'firebase_options.dart';
 
 // TODO Refactor Authentication class
-class Authentication {
-  static Future<FirebaseApp> initializeFirebase({
+class AuthenticationRepository {
+  const AuthenticationRepository({
+    required FirebaseAuth firebaseAuth,
+    required GoogleSignIn googleSignIn,
+  })  : _firebaseAuth = firebaseAuth,
+        _googleSignIn = googleSignIn;
+
+  final FirebaseAuth _firebaseAuth;
+  final GoogleSignIn _googleSignIn;
+  // 여기까지 AuthRepository
+
+  Future<void> initializeFirebase({
     required BuildContext context,
   }) async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = _firebaseAuth.currentUser;
 
     if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => UserInfoScreen(
-            user: user,
+      Future.delayed(Duration.zero, () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => UserInfoScreen(
+              user: user,
+            ),
           ),
-        ),
-      );
+        );
+      });
     }
-
-    return firebaseApp;
+    return;
   }
 
-  static Future<User?> signInWithGoogle({required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+  Future<User?> signInWithGoogle({required BuildContext context}) async {
     User? user;
 
     if (kIsWeb) {
@@ -40,21 +46,18 @@ class Authentication {
 
       try {
         final UserCredential userCredential =
-            await auth.signInWithPopup(authProvider);
+            await _firebaseAuth.signInWithPopup(authProvider);
 
         user = userCredential.user;
       } catch (e) {
         print(e);
       }
     } else {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final googleUser = await _googleSignIn.signIn();
 
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-
-      if (googleSignInAccount != null) {
+      if (googleUser != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+            await googleUser.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
@@ -63,7 +66,7 @@ class Authentication {
 
         try {
           final UserCredential userCredential =
-              await auth.signInWithCredential(credential);
+              await _firebaseAuth.signInWithCredential(credential);
 
           user = userCredential.user;
         } on FirebaseAuthException catch (e) {
@@ -81,17 +84,17 @@ class Authentication {
     return user;
   }
 
-  static Future<void> signOut({required BuildContext context}) async {
+  Future<void> signOut({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
       if (!kIsWeb) {
-        await googleSignIn.signOut();
+        await _googleSignIn.signOut();
       }
-      await FirebaseAuth.instance.signOut();
+      await _firebaseAuth.signOut();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        Authentication.customSnackBar(
+        AuthenticationRepository.customSnackBar(
           content: 'Error signing out. Try again.',
         ),
       );

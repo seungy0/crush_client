@@ -1,10 +1,11 @@
 import 'package:crush_client/mainpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 
-import 'authentication.dart';
-import 'custom_color.dart';
+import '../authentication_repository.dart';
+import '../custom_color.dart';
 
 class SignInWithVideo extends StatefulWidget {
   const SignInWithVideo({super.key});
@@ -91,7 +92,8 @@ class _SignInScreenState extends State<SignInScreen> {
         Row(),
         Center(
           child: FutureBuilder(
-            future: Authentication.initializeFirebase(context: context),
+            future: RepositoryProvider.of<AuthenticationRepository>(context)
+                .initializeFirebase(context: context),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return const Text('Error initializing Firebase');
@@ -144,7 +146,9 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 });
 
                 User? user =
-                    await Authentication.signInWithGoogle(context: context);
+                    await RepositoryProvider.of<AuthenticationRepository>(
+                            context)
+                        .signInWithGoogle(context: context);
 
                 setState(() {
                   _isSigningIn = false;
@@ -328,7 +332,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         setState(() {
                           _isSigningOut = true;
                         });
-                        await Authentication.signOut(context: context);
+                        await RepositoryProvider.of<AuthenticationRepository>(
+                                context)
+                            .signOut(context: context);
                         setState(() {
                           _isSigningOut = false;
                         });
