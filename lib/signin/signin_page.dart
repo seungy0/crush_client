@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 
-import '../authentication_repository.dart';
+import '../repositories/authentication_repository.dart';
 import '../custom_color.dart';
 
 class SignInWithVideo extends StatefulWidget {

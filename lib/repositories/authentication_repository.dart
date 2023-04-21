@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'firebase_options.dart';
+import '../firebase_options.dart';
 
 // TODO Refactor Authentication class
 class AuthenticationRepository {

@@ -45,18 +45,8 @@ dependencies:
   flutter_bloc: ^8.1.2
   firebase_storage: ^11.1.0
 
-  analytics:
-    path: packages/analytics
-  authentication_repository:
-    path: packages/authentication_repository
-  camera:
-    path: packages/camera/camera
-  image_compositor:
-    path: packages/image_compositor
   photobooth_ui:
     path: packages/photobooth_ui
-  photos_repository:
-    path: packages/photos_repository
   platform_helper:
     path: packages/platform_helper
 

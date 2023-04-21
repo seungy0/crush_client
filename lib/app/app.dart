@@ -2,9 +2,9 @@ import 'package:crush_client/signin/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photobooth_ui/photobooth_ui.dart';
-import 'package:photos_repository/photos_repository.dart';
 
-import '../authentication_repository.dart';
+import '../repositories/authentication_repository.dart';
+import '../repositories/photos_repository.dart';
 
 class App extends StatelessWidget {
   const App({
