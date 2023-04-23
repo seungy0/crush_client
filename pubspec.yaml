@@ -45,10 +45,6 @@ dependencies:
   flutter_bloc: ^8.1.2
   firebase_storage: ^11.1.0
 
-  photobooth_ui:
-    path: packages/photobooth_ui
-  platform_helper:
-    path: packages/platform_helper
 
 
 dev_dependencies:
