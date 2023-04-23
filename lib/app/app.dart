@@ -1,7 +1,6 @@
-import 'package:crush_client/signin/signin_page.dart';
+import 'package:crush_client/signin/view/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:photobooth_ui/photobooth_ui.dart';
 
 import '../repositories/authentication_repository.dart';
 import '../repositories/photos_repository.dart';
@@ -23,33 +22,17 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: authenticationRepository),
         RepositoryProvider.value(value: photosRepository),
       ],
-      child: AnimatedFadeIn(
-        child: ResponsiveLayoutBuilder(
-          small: (_, __) => _App(theme: PhotoboothTheme.small),
-          medium: (_, __) => _App(theme: PhotoboothTheme.medium),
-          large: (_, __) => _App(theme: PhotoboothTheme.standard),
-        ),
-      ),
+      child: _App(),
     );
   }
 }
 
 class _App extends StatelessWidget {
-  const _App({required this.theme});
-
-  final ThemeData theme;
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'I/O Photo Booth',
-      theme: theme,
-      // localizationsDelegates: const [
-      //   AppLocalizations.delegate,
-      //   GlobalMaterialLocalizations.delegate,
-      // ],
-      // supportedLocales: AppLocalizations.supportedLocales,
-      home: const SignInWithVideo(),
+    return const MaterialApp(
+      title: 'Crush',
+      home: SignInWithVideo(),
     );
   }
 }
