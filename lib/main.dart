@@ -10,8 +10,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'app/app.dart';
 import 'app/app_bloc_observer.dart';
-import 'repositories/authentication_repository.dart';
 import 'firebase_options.dart';
+import 'repositories/authentication_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

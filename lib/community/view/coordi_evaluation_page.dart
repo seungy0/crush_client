@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class PeoplesPage extends StatefulWidget {
+class CoordiEvalPage extends StatefulWidget {
   @override
-  State<PeoplesPage> createState() => _PeoplesPageState();
+  State<CoordiEvalPage> createState() => _CoordiEvalPageState();
 }
 
 @override
-class _PeoplesPageState extends State<PeoplesPage> {
+class _CoordiEvalPageState extends State<CoordiEvalPage> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../mainpage.dart';
+import '../../common/view/root_tab.dart';
 import '../../repositories/authentication_repository.dart';
 
 class GoogleSignInButton extends StatefulWidget {

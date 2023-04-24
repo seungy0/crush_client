@@ -1,10 +1,9 @@
 import 'package:crush_client/repositories/repositories.dart';
 import 'package:crush_client/signin/signin.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:crush_client/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
-import 'package:crush_client/theme/theme.dart';
 
 class SignInWithVideo extends StatefulWidget {
   const SignInWithVideo({super.key});
@@ -89,7 +88,7 @@ class _SignInScreenState extends State<SignInScreen> {
               } else if (snapshot.connectionState == ConnectionState.done) {
                 return const GoogleSignInButton();
               }
-              return CircularProgressIndicator(
+              return const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
                   CustomColors.firebaseOrange,
                 ),

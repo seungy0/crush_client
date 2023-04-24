@@ -82,8 +82,6 @@ class AuthenticationRepository {
   }
 
   Future<void> signOut({required BuildContext context}) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-
     try {
       if (!kIsWeb) {
         await _googleSignIn.signOut();
