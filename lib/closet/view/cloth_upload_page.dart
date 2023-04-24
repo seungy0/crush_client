@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:crush_client/closet/model/cloth_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClothInput extends StatefulWidget {
@@ -13,6 +17,7 @@ class _ClothInputState extends State<ClothInput> {
   String type = '';
   String thickness = '';
   late SharedPreferences prefs;
+  Color selectedColor = Colors.white;
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
@@ -130,10 +135,12 @@ class _ClothInputState extends State<ClothInput> {
           );
           final Closet = prefs.getStringList('Closet');
           if (Closet != null) {
-            Closet.add(
-                '{"name": "$name", "color": "$color", "type": "$type", "thickness": "$thickness"}');
+            Closet.add(json.encode(Cloth(
+                    name: name, color: color, type: type, thickness: thickness)
+                .toJson()));
             await prefs.setStringList('Closet', Closet);
           }
+          Navigator.pop(context, true);
         }
       },
       child: const Text(
@@ -153,27 +160,86 @@ class _ClothInputState extends State<ClothInput> {
     assert(onSaved != null);
     assert(validator != null);
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w700,
+    if (label == '색깔') {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
+              IconButton(
+                icon: Icon(Icons.color_lens),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('색상 선택'),
+                        content: SingleChildScrollView(
+                          child: MaterialPicker(
+                            pickerColor: selectedColor,
+                            onColorChanged: (color) {
+                              setState(() {
+                                selectedColor = color;
+                              });
+                            },
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('확인'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+          Container(
+            height: 40,
+            decoration: BoxDecoration(
+              color: selectedColor,
+              borderRadius: BorderRadius.circular(8),
             ),
-          ],
-        ),
-        TextFormField(
-          onSaved: onSaved,
-          validator: validator,
-        ),
-        Container(
-          height: 16.0,
-        ),
-      ],
-    );
+          ),
+          Container(
+            height: 16.0,
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          TextFormField(
+            onSaved: onSaved,
+            validator: validator,
+          ),
+          Container(
+            height: 16.0,
+          ),
+        ],
+      );
+    }
   }
 }

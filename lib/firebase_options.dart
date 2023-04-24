@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '392902111868',
     projectId: 'crush-5f8dc',
     storageBucket: 'crush-5f8dc.appspot.com',
-    iosClientId: '392902111868-tbmudie2b3qq7ko1jtdro5l7h3jbu201.apps.googleusercontent.com',
+    iosClientId:
+        '392902111868-tbmudie2b3qq7ko1jtdro5l7h3jbu201.apps.googleusercontent.com',
     iosBundleId: 'com.zero.crushClient',
   );
 }
