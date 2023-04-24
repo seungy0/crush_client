@@ -1,11 +1,8 @@
-import 'package:crush_client/signin/signin_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:crush_client/signin/signin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../firebase_options.dart';
 
 // TODO Refactor Authentication class
 class AuthenticationRepository {
