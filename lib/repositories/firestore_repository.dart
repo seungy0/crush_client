@@ -36,4 +36,14 @@ class FirestoreRepository {
       'thickness': cloth.thickness,
     });
   }
+
+  // getCloth List
+  Future<List<Cloth>> getClothList({required String uid}) async {
+    final clothList = await _firebaseFirestore
+        .collection('Users')
+        .doc(uid)
+        .collection('clothes')
+        .get();
+    return clothList.docs.map((cloth) => Cloth.fromJson(cloth.data())).toList();
+  }
 }
