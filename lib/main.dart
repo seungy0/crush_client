@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crush_client/repositories/firestore_repository.dart';
 import 'package:crush_client/repositories/photos_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,12 +29,16 @@ void main() async {
   final photosRepository = PhotosRepository(
     firebaseStorage: FirebaseStorage.instance,
   );
+  final firestoreRepository = FirestoreRepository(
+    firebaseFirestore: FirebaseFirestore.instance,
+  );
 
   runZonedGuarded(
     () => runApp(
       App(
         authenticationRepository: authenticationRepository,
         photosRepository: photosRepository,
+        firestoreRepository: firestoreRepository,
       ),
     ),
     (error, stackTrace) {

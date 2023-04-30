@@ -1,19 +1,19 @@
+import 'package:crush_client/repositories/repositories.dart';
 import 'package:crush_client/signin/view/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../repositories/authentication_repository.dart';
-import '../repositories/photos_repository.dart';
 
 class App extends StatelessWidget {
   const App({
     required this.authenticationRepository,
     required this.photosRepository,
+    required this.firestoreRepository,
     super.key,
   });
 
   final AuthenticationRepository authenticationRepository;
   final PhotosRepository photosRepository;
+  final FirestoreRepository firestoreRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +21,7 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: authenticationRepository),
         RepositoryProvider.value(value: photosRepository),
+        RepositoryProvider.value(value: firestoreRepository),
       ],
       child: _App(),
     );
