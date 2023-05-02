@@ -37,6 +37,17 @@ class FirestoreRepository {
     });
   }
 
+  // get Cloth
+  Future<Cloth> getCloth({required String uid, required String clothId}) async {
+    final cloth = await _firebaseFirestore
+        .collection('Users')
+        .doc(uid)
+        .collection('clothes')
+        .doc(clothId)
+        .get();
+    return Cloth.fromJson(cloth.data()!);
+  }
+
   // getCloth List
   Future<List<Cloth>> getClothList({required String uid}) async {
     final clothList = await _firebaseFirestore
