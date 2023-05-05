@@ -1,4 +1,5 @@
 import 'package:crush_client/closet/view/closet_page.dart';
+import 'package:crush_client/closet/view/cloth_upload_page.dart';
 import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
@@ -140,7 +141,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
       children: [
         SimpleDialogOption(
           onPressed: () {
-            //Navigator.pop(context); 기능구현 후에 추가
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ClothInput()),
+            );
           },
           child: const Text('나의 옷장'),
         ),
