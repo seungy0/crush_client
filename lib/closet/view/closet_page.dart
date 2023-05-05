@@ -4,7 +4,10 @@ import 'package:crush_client/closet/model/cloth_model.dart';
 import 'package:crush_client/closet/view/cloth_upload_page.dart';
 import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
+import 'package:crush_client/repositories/authentication_repository.dart';
+import 'package:crush_client/repositories/firestore_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClosetPage extends StatefulWidget {
@@ -28,15 +31,19 @@ class _ClosetPageState extends State<ClosetPage> {
 
   Future<void> initCloset() async {
     prefs = await SharedPreferences.getInstance();
-    setState(() {
+    setState(() async {
       closet = prefs.getStringList('Closet');
       if (closet != null) {
         for (int i = 0; i < closet!.length; i++) {
           final Map<String, dynamic> clothJson =
-          jsonDecode(closet![i]) as Map<String, dynamic>;
+              jsonDecode(closet![i]) as Map<String, dynamic>;
           clothList.add(Cloth.fromJson(clothJson));
         }
       }
+      clothList = await RepositoryProvider.of<FirestoreRepository>(context)
+          .getClothList(
+              uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                  .currentUser);
       isLoaded = true;
     });
   }
@@ -65,30 +72,30 @@ class _ClosetPageState extends State<ClosetPage> {
                         return ListTile(
                           title: Text(clothList[index].name),
                           subtitle: Text(clothList[index].type),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.blueAccent,
-                  backgroundColor: Colors.grey,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.add),
-                    Text('새 옷 등록',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                onPressed: () async {
-                  await Navigator.push(
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.blueAccent,
+                        backgroundColor: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Icon(Icons.add),
+                          Text('새 옷 등록',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => ClothInput()),
                         );
@@ -105,14 +112,15 @@ class _ClosetPageState extends State<ClosetPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RecommendPage()),
+                        MaterialPageRoute(
+                            builder: (context) => RecommendPage()),
                       );
                     },
                     child: const Text('추천 받기'),
                   ),
                 ],
-        ),
-      )
+              ),
+            )
           : Center(child: CircularProgressIndicator()),
     );
   }
