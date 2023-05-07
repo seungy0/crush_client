@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../repositories/authentication_repository.dart';
 import '../repositories/photos_repository.dart';
-import 'package:crush_client/closet/view/cloth_upload_page.dart';
+
 class App extends StatelessWidget {
   const App({
     required this.authenticationRepository,
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
 class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Crush',
       home: SignInWithVideo(),
     );
