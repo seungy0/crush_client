@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:crush_client/closet/model/cloth_model.dart';
+
 import 'package:crush_client/closet/view/image_upload.dart';
 import 'package:crush_client/closet/view/my_palette.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
+import 'package:crush_client/repositories/repositories.dart;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClothInput extends StatefulWidget {
@@ -151,6 +154,15 @@ class _ClothInputState extends State<ClothInput> {
                 .toJson()));
             await prefs.setStringList('Closet', Closet);
           }
+          RepositoryProvider.of<FirestoreRepository>(context).addCloth(
+              uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                  .currentUser,
+              cloth: Cloth(
+                name: name,
+                color: color,
+                type: type,
+                thickness: thickness,
+              ));
           Navigator.pop(context, true);
         }
       },

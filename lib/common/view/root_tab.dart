@@ -4,9 +4,12 @@ import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/community/view/coordi_evaluation_page.dart';
+import 'package:crush_client/repositories/authentication_repository.dart';
+import 'package:crush_client/repositories/firestore_repository.dart';
 import 'package:crush_client/user/view/my_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Mainpage extends StatefulWidget {
   const Mainpage({Key? key, required User user}) : super(key: key);
@@ -23,6 +26,15 @@ class _MainpageState extends State<Mainpage>
   @override
   void initState() {
     super.initState();
+    // FirebaseRepository의 initDocument 메서드 호출
+    RepositoryProvider.of<FirestoreRepository>(context).initDocument(
+      document:
+          RepositoryProvider.of<AuthenticationRepository>(context).currentUser,
+      name: RepositoryProvider.of<AuthenticationRepository>(context)
+          .currentUserName,
+      email: RepositoryProvider.of<AuthenticationRepository>(context)
+          .currentUserEmail,
+    );
 
     controller = TabController(length: 5, vsync: this);
     controller.addListener(tabListener);

@@ -4,8 +4,10 @@ import 'package:crush_client/closet/model/cloth_model.dart';
 import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
+import 'package:crush_client/repositories/repositories.dart;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClosetPage extends StatefulWidget {
@@ -32,7 +34,7 @@ class _ClosetPageState extends State<ClosetPage>
 
   Future<void> initCloset() async {
     prefs = await SharedPreferences.getInstance();
-    setState(() {
+    setState(() async {
       closet = prefs.getStringList('Closet');
       if (closet != null) {
         for (int i = 0; i < closet!.length; i++) {
@@ -41,6 +43,10 @@ class _ClosetPageState extends State<ClosetPage>
           clothList.add(Cloth.fromJson(clothJson));
         }
       }
+      clothList = await RepositoryProvider.of<FirestoreRepository>(context)
+          .getClothList(
+              uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                  .currentUser);
       isLoaded = true;
     });
   }
