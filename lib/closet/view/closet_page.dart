@@ -4,7 +4,7 @@ import 'package:crush_client/closet/model/cloth_model.dart';
 import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
-import 'package:crush_client/repositories/repositories.dart;
+import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

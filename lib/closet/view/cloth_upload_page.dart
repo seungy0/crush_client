@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:crush_client/closet/model/cloth_model.dart';
-
 import 'package:crush_client/closet/view/image_upload.dart';
 import 'package:crush_client/closet/view/my_palette.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
-import 'package:crush_client/repositories/repositories.dart;
+import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
