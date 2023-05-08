@@ -1,4 +1,5 @@
 import 'package:crush_client/closet/view/closet_page.dart';
+import 'package:crush_client/closet/view/cloth_upload_page.dart';
 import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
@@ -57,8 +58,13 @@ class _MainpageState extends State<Mainpage>
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '나의 옷장',
+      bottomNavigationBar: CustomBottomNavigationBar(
+          currentIndex: index,
+          onTap: (int index) {
+            controller.animateTo(index);
+          }),
       child: TabBarView(
-        physics: NeverScrollableScrollPhysics(), //스크롤 막기
+        physics: const NeverScrollableScrollPhysics(), //스크롤 막기
         controller: controller,
         children: [
           //1. 나의 옷장 and 옷추천 2. 나의 코디 +:[옷, 코디] 사진 추가 4. 다른사람 코디 평가 5. 설정
@@ -70,11 +76,6 @@ class _MainpageState extends State<Mainpage>
           MyPage(),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-          currentIndex: index,
-          onTap: (int index) {
-            controller.animateTo(index);
-          }),
     );
   }
 }
@@ -132,8 +133,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
                   builder: (context) => _buildAddOptionsDialog(context),
                 );
               },
-              child: Icon(Icons.add),
               backgroundColor: PRIMARY_COLOR,
+              child: const Icon(Icons.add),
             ),
           ),
         ),
@@ -143,8 +144,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   Widget _buildAddOptionsDialog(BuildContext context) {
     return SimpleDialog(
-      title: Text('추가하기'),
-      titleTextStyle: TextStyle(
+      title: const Text('추가하기'),
+      titleTextStyle: const TextStyle(
         color: PRIMARY_COLOR,
         fontSize: 15,
         fontWeight: FontWeight.bold,
@@ -152,15 +153,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
       children: [
         SimpleDialogOption(
           onPressed: () {
-            //Navigator.pop(context); 기능구현 후에 추가
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ClothInput()),
+            );
           },
-          child: Text('나의 옷장'),
+          child: const Text('나의 옷장'),
         ),
         SimpleDialogOption(
           onPressed: () {
             //Navigator.pop(context); 기능구현 후에 추가
           },
-          child: Text('나의 코디 & 패션'),
+          child: const Text('나의 코디 & 패션'),
         ),
       ],
     );
