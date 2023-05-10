@@ -88,72 +88,10 @@ class _ClosetPageState extends State<ClosetPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  Expanded(
-                    child: StreamBuilder<List<Cloth>>(
-                      stream:
-                          RepositoryProvider.of<FirestoreRepository>(context)
-                              .getClothStream(
-                                  uid: RepositoryProvider.of<
-                                          AuthenticationRepository>(context)
-                                      .currentUser),
-                      builder: (context, clothList) {
-                        if (clothList.hasError)
-                          return Center(
-                              child: Text('Error: ${clothList.error}'));
-                        if (clothList.connectionState ==
-                            ConnectionState.waiting)
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        return GridView.builder(
-                          itemCount: clothList.data!.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            final Cloth cloth = clothList.data![index];
-                            return GestureDetector(
-                              onTap: () {
-                                _showClothDialog(context, cloth);
-                              },
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU',
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(cloth.name),
-                                        Text(' '),
-                                        Text(cloth.type),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  const Center(
-                    child: Text('상의'),
-                  ),
-
-                  // 두 번째 탭의 내용
-                  const Center(
-                    child: Text('하의'),
-                  ),
-                  const Center(
-                    child: Text('기타'),
-                  ),
+                  _buildClothesByType('전체'),
+                  _buildClothesByType('상의'),
+                  _buildClothesByType('하의'),
+                  _buildClothesByType('기타'),
                 ],
               ),
             ),
@@ -332,6 +270,59 @@ class _ClosetPageState extends State<ClosetPage>
           child: child,
         );
       },
+    );
+  }
+
+  /// widget that show Clothes by type
+  Widget _buildClothesByType(String type) {
+    return Expanded(
+      child: StreamBuilder<List<Cloth>>(
+        stream: RepositoryProvider.of<FirestoreRepository>(context)
+            .getClothStreamByType(
+                uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                    .currentUser,
+                type: type),
+        builder: (context, clothList) {
+          if (clothList.hasError)
+            return Center(child: Text('Error: ${clothList.error}'));
+          if (clothList.connectionState == ConnectionState.waiting)
+            return const Center(child: CircularProgressIndicator());
+          return GridView.builder(
+            itemCount: clothList.data!.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              final Cloth cloth = clothList.data![index];
+              return GestureDetector(
+                onTap: () {
+                  _showClothDialog(context, cloth);
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Image.network(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(cloth.name),
+                          Text(' '),
+                          Text(cloth.type),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
