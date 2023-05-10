@@ -25,11 +25,13 @@ class FirestoreRepository {
     required String uid,
     required Cloth cloth,
   }) async {
-    await _firebaseFirestore
+    final autoId = _firebaseFirestore
         .collection('Users')
         .doc(uid)
         .collection('clothes')
-        .add({
+        .doc();
+    autoId.set({
+      'clothId': autoId.id,
       'name': cloth.name,
       'color': cloth.color,
       'type': cloth.type,
@@ -85,5 +87,18 @@ class FirestoreRepository {
         .map((clothList) => clothList.docs
             .map((cloth) => Cloth.fromJson(cloth.data()))
             .toList());
+  }
+
+  /// remove Cloth
+  Future<void> removeCloth({
+    required String uid,
+    required String clothId,
+  }) async {
+    await _firebaseFirestore
+        .collection('Users')
+        .doc(uid)
+        .collection('clothes')
+        .doc(clothId)
+        .delete();
   }
 }
