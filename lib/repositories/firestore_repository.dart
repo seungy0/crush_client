@@ -7,7 +7,7 @@ class FirestoreRepository {
       : _firebaseFirestore = firebaseFirestore;
   final FirebaseFirestore _firebaseFirestore;
 
-  // init Document
+  /// init Document
   Future<void> initDocument({
     required String document,
     required String name,
@@ -37,7 +37,7 @@ class FirestoreRepository {
     });
   }
 
-  // get Cloth
+  /// get Cloth
   Future<Cloth> getCloth({required String uid, required String clothId}) async {
     final cloth = await _firebaseFirestore
         .collection('Users')
@@ -48,7 +48,7 @@ class FirestoreRepository {
     return Cloth.fromJson(cloth.data()!);
   }
 
-  // getCloth List
+  /// getCloth List
   Future<List<Cloth>> getClothList({required String uid}) async {
     final clothList = await _firebaseFirestore
         .collection('Users')
