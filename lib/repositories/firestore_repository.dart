@@ -75,6 +75,7 @@ class FirestoreRepository {
     required String uid,
     required String type,
   }) {
+    if (type == '전체') return getClothStream(uid: uid);
     return _firebaseFirestore
         .collection('Users')
         .doc(uid)
