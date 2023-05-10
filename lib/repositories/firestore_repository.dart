@@ -69,4 +69,20 @@ class FirestoreRepository {
             .map((cloth) => Cloth.fromJson(cloth.data()))
             .toList());
   }
+
+  // get Cloth Stream by type
+  Stream<List<Cloth>> getClothStreamByType({
+    required String uid,
+    required String type,
+  }) {
+    return _firebaseFirestore
+        .collection('Users')
+        .doc(uid)
+        .collection('clothes')
+        .where('type', isEqualTo: type)
+        .snapshots()
+        .map((clothList) => clothList.docs
+            .map((cloth) => Cloth.fromJson(cloth.data()))
+            .toList());
+  }
 }
