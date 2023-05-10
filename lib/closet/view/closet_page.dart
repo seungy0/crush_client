@@ -234,11 +234,13 @@ class _ClosetPageState extends State<ClosetPage>
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            // clothList.remove(cloth);
-                            // final List<String> updatedCloset = clothList
-                            //     .map((e) => jsonEncode(e.toJson()))
-                            //     .toList();
-                            // await prefs.setStringList('Closet', updatedCloset);
+                            await RepositoryProvider.of<FirestoreRepository>(
+                                    context)
+                                .removeCloth(
+                                    uid: RepositoryProvider.of<
+                                            AuthenticationRepository>(context)
+                                        .currentUser,
+                                    clothId: cloth.clothId);
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(

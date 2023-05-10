@@ -1,5 +1,5 @@
 class Cloth {
-  String? clothId;
+  String clothId;
   final String name;
   final String color;
   final String type;
