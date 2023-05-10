@@ -1,8 +1,9 @@
-import 'package:crush_client/signin/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../common/view/root_tab.dart';
 
 // TODO Refactor Authentication class
 class AuthenticationRepository {
@@ -25,7 +26,7 @@ class AuthenticationRepository {
       Future.delayed(Duration.zero, () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => UserInfoScreen(
+            builder: (context) => Mainpage(
               user: user,
             ),
           ),
@@ -94,6 +95,21 @@ class AuthenticationRepository {
         ),
       );
     }
+  }
+
+  // method that return currentUser uid
+  String get currentUser {
+    return _firebaseAuth.currentUser!.uid;
+  }
+
+  // method that return currentUser user name
+  String get currentUserName {
+    return _firebaseAuth.currentUser!.displayName!;
+  }
+
+  // method that return currentUser user email
+  String get currentUserEmail {
+    return _firebaseAuth.currentUser!.email!;
   }
 
   static SnackBar customSnackBar({required String content}) {
