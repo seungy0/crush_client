@@ -1,3 +1,4 @@
+import 'package:crush_client/community/widgets/coordi_evaluation_widget.dart';
 import 'package:flutter/material.dart';
 
 class CoordiEvalPage extends StatefulWidget {
@@ -9,10 +10,10 @@ class CoordiEvalPage extends StatefulWidget {
 class _CoordiEvalPageState extends State<CoordiEvalPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Center(
-        child: Text('다른 사람 코디'),
-      ),
+    return Column(
+      children: [
+        CoordiEvalCard(imageID: 'assets/musinsa.jpg'),
+      ],
     );
   }
 }

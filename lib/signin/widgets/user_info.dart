@@ -80,8 +80,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   : ClipOval(
                       child: Material(
                         color: CustomColors.firebaseGrey.withOpacity(0.3),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(16.0),
                           child: Icon(
                             Icons.person,
                             size: 60,
@@ -91,7 +91,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       ),
                     ),
               const SizedBox(height: 16.0),
-              Text(
+              const Text(
                 'Hello',
                 style: TextStyle(
                   color: CustomColors.firebaseGrey,
@@ -101,7 +101,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               const SizedBox(height: 8.0),
               Text(
                 _user.displayName!,
-                style: TextStyle(
+                style: const TextStyle(
                   color: CustomColors.firebaseYellow,
                   fontSize: 26,
                 ),
@@ -109,7 +109,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               const SizedBox(height: 8.0),
               Text(
                 '( ${_user.email!} )',
-                style: TextStyle(
+                style: const TextStyle(
                   color: CustomColors.firebaseOrange,
                   fontSize: 20,
                   letterSpacing: 0.5,
