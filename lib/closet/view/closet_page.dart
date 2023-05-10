@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:crush_client/closet/model/cloth_model.dart';
 import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
@@ -8,7 +6,6 @@ import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ClosetPage extends StatefulWidget {
   @override
@@ -18,37 +15,21 @@ class ClosetPage extends StatefulWidget {
 @override
 class _ClosetPageState extends State<ClosetPage>
     with SingleTickerProviderStateMixin {
-  late SharedPreferences prefs;
-  List<String>? closet;
   List<Cloth> clothList = [];
-  bool isLoaded = false;
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    clothList = [];
-    initCloset();
     _tabController = TabController(length: 4, vsync: this);
   }
 
-  Future<void> initCloset() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() async {
-      closet = prefs.getStringList('Closet');
-      if (closet != null) {
-        for (int i = 0; i < closet!.length; i++) {
-          final Map<String, dynamic> clothJson =
-              jsonDecode(closet![i]) as Map<String, dynamic>;
-          clothList.add(Cloth.fromJson(clothJson));
-        }
-      }
-      clothList = await RepositoryProvider.of<FirestoreRepository>(context)
-          .getClothList(
-              uid: RepositoryProvider.of<AuthenticationRepository>(context)
-                  .currentUser);
-      isLoaded = true;
-    });
+  Future<List<Cloth>> initCloset() async {
+    final clothList = await RepositoryProvider.of<FirestoreRepository>(context)
+        .getClothList(
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                .currentUser);
+    return clothList;
   }
 
   @override
@@ -60,146 +41,158 @@ class _ClosetPageState extends State<ClosetPage>
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      child: isLoaded
-          ? Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 300,
-                        child: TabBar(
-                          indicator: const ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              side: BorderSide(width: 0.5, color: Colors.grey),
-                            ),
-                          ),
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          indicatorPadding: EdgeInsets.fromLTRB(0, -2, 0, 2),
-                          labelColor: Colors.black,
-                          unselectedLabelColor: Colors.grey,
-                          indicatorColor: Colors.black,
-                          controller: _tabController,
-                          tabs: const [
-                            Tab(text: '전체'),
-                            Tab(text: '상의'),
-                            Tab(text: '하의'),
-                            Tab(text: '기타'),
-                          ],
-                        ),
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 300,
+                  child: TabBar(
+                    indicator: const ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        side: BorderSide(width: 0.5, color: Colors.grey),
                       ),
+                    ),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorPadding: EdgeInsets.fromLTRB(0, -2, 0, 2),
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.grey,
+                    indicatorColor: Colors.black,
+                    controller: _tabController,
+                    tabs: const [
+                      Tab(text: '전체'),
+                      Tab(text: '상의'),
+                      Tab(text: '하의'),
+                      Tab(text: '기타'),
                     ],
                   ),
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: Colors.grey[300],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                ),
+              ],
+            ),
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: Colors.grey[300],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
                   Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        Expanded(
-                          child: GridView.builder(
-                            itemCount: clothList.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              final Cloth cloth = clothList[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  _showClothDialog(context, cloth);
-                                },
-                                child: Container(
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(cloth.name),
-                                          Text(' '),
-                                          Text(cloth.type),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                    child: StreamBuilder<List<Cloth>>(
+                      stream:
+                          RepositoryProvider.of<FirestoreRepository>(context)
+                              .getClothStream(
+                                  uid: RepositoryProvider.of<
+                                          AuthenticationRepository>(context)
+                                      .currentUser),
+                      builder: (context, clothList) {
+                        if (clothList.hasError)
+                          return Center(
+                              child: Text('Error: ${clothList.error}'));
+                        if (clothList.connectionState ==
+                            ConnectionState.waiting)
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        return GridView.builder(
+                          itemCount: clothList.data!.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
                           ),
-                        ),
-                        const Center(
-                          child: Text('상의'),
-                        ),
-
-                        // 두 번째 탭의 내용
-                        const Center(
-                          child: Text('하의'),
-                        ),
-                        const Center(
-                          child: Text('기타'),
-                        ),
-                      ],
+                          itemBuilder: (BuildContext context, int index) {
+                            final Cloth cloth = clothList.data![index];
+                            return GestureDetector(
+                              onTap: () {
+                                _showClothDialog(context, cloth);
+                              },
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Image.network(
+                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU',
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(cloth.name),
+                                        Text(' '),
+                                        Text(cloth.type),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          backgroundColor: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RecommendPage()),
-                          );
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 2.5, vertical: 8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(CupertinoIcons.paperplane_fill,
-                                  color: INPUT_BG_COLOR),
-                              SizedBox(width: 10),
-                              Text(' 옷 추천', style: TextStyle(fontSize: 16)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                  const Center(
+                    child: Text('상의'),
+                  ),
+
+                  // 두 번째 탭의 내용
+                  const Center(
+                    child: Text('하의'),
+                  ),
+                  const Center(
+                    child: Text('기타'),
                   ),
                 ],
               ),
-            )
-          : const Center(child: CircularProgressIndicator()),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: PRIMARY_COLOR,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RecommendPage()),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 2.5, vertical: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(CupertinoIcons.paperplane_fill,
+                            color: INPUT_BG_COLOR),
+                        SizedBox(width: 10),
+                        Text(' 옷 추천', style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -303,11 +296,11 @@ class _ClosetPageState extends State<ClosetPage>
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            clothList.remove(cloth);
-                            final List<String> updatedCloset = clothList
-                                .map((e) => jsonEncode(e.toJson()))
-                                .toList();
-                            await prefs.setStringList('Closet', updatedCloset);
+                            // clothList.remove(cloth);
+                            // final List<String> updatedCloset = clothList
+                            //     .map((e) => jsonEncode(e.toJson()))
+                            //     .toList();
+                            // await prefs.setStringList('Closet', updatedCloset);
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
