@@ -1,4 +1,5 @@
 import 'package:crush_client/closet/model/cloth_model.dart';
+import 'package:crush_client/closet/view/cloth_type.dart';
 import 'package:crush_client/closet/view/image_upload.dart';
 import 'package:crush_client/closet/view/my_palette.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
@@ -153,11 +154,68 @@ class _ClothInputState extends State<ClothInput> {
     required String label,
     required FormFieldSetter onSaved,
     required FormFieldValidator validator,
+    String? thickness,
   }) {
     assert(onSaved != null);
     assert(validator != null);
 
     if (label == '색깔') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ColorSelection(
+                  onSaved: onSaved,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 16.0,
+          ),
+        ],
+      );
+    }
+    else if (label == '종류') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TypeSelection(
+                  onSaved: onSaved,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 16.0,
+          ),
+        ],
+      );
+    }
+    else if (label == '두께'){
       return Column(
         children: [
           Row(
@@ -171,11 +229,49 @@ class _ClothInputState extends State<ClothInput> {
                 ),
               ),
               const SizedBox(width: 10),
-              MyPalette(
-                onSaved: onSaved,
-                onColorSelected: (Color color) {
-                  onSaved(color.toString());
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    thickness = '두꺼움';
+                  });
+                  onSaved(thickness);
                 },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  backgroundColor: thickness == '두꺼움' ? Colors.blue : Colors.grey[200],
+                  foregroundColor: Colors.black,
+                ),
+                child: const Text('두꺼움'),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    thickness = '보통';
+                  });
+                  onSaved(thickness);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  backgroundColor: thickness == '보통' ? Colors.blue : Colors.grey[200],
+                  foregroundColor: Colors.black,
+                ),
+                child: const Text('보통'),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    thickness = '얇음';
+                  });
+                  onSaved(thickness);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  backgroundColor: thickness == '얇음' ? Colors.blue : Colors.grey[200],
+                  foregroundColor: Colors.black,
+                ),
+                child: const Text('얇음'),
               ),
             ],
           ),
@@ -184,11 +280,12 @@ class _ClothInputState extends State<ClothInput> {
           ),
         ],
       );
-    } else {
+    }
+    else {
       return Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 label,
