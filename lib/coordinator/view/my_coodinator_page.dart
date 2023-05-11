@@ -1,7 +1,6 @@
 import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:flutter/material.dart';
 import '../widget/my_coordi_card.dart';
-import 'my_coordinator_detail.dart';
 
 class MyCoordiPage extends StatelessWidget {
   const MyCoordiPage({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class MyCoordiPage extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 10.0,
                   mainAxisSpacing: 10.0,
@@ -81,8 +80,8 @@ class MyCoordiPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
                   ),
 
                   Expanded(
@@ -124,7 +123,7 @@ class MyCoordiPage extends StatelessWidget {
                                     children: const [
                                       Text(
                                         'MUSINSA\'S PICK',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 35.0,
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
