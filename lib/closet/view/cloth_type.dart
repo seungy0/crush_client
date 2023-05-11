@@ -64,43 +64,53 @@ class _TypeSelectionState extends State<TypeSelection> {
         ),
         showTypePicker
             ? SizedBox(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: Types.map((Type) {
-              return SizedBox(
-                width: 80,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedTypeName = Type['name'];
-                      widget.onSaved(Type['name']);
-                      showTypePicker = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                    backgroundColor: selectedTypeName == Type['name'] ? Colors.blue : Colors.grey[200],
-                    foregroundColor: Colors.black,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        Type['name'],
-                        style: const TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w700,
+                height: MediaQuery.of(context).size.height * 0.3,
+                child: Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: Types.map((Type) {
+                    return SizedBox(
+                      width: 80,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedTypeName = Type['name'];
+                            widget.onSaved(Type['name']);
+                            showTypePicker = false;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 8),
+                          backgroundColor: selectedTypeName == Type['name']
+                              ? Colors.grey[200]
+                              : Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side: BorderSide(
+                              color: Colors.grey[50] as Color,
+                              width: 1.0,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              Type['name'],
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  }).toList(),
                 ),
-              );
-            }).toList(),
-          ),
-        )
+              )
             : Container(),
       ],
     );
