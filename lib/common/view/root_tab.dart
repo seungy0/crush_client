@@ -11,6 +11,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../coordinator/view/my_coodinator_page.dart';
+
 class Mainpage extends StatefulWidget {
   const Mainpage({Key? key, required User user}) : super(key: key);
 
@@ -70,7 +72,7 @@ class _MainpageState extends State<Mainpage>
           //1. 나의 옷장 and 옷추천 2. 나의 코디 +:[옷, 코디] 사진 추가 4. 다른사람 코디 평가 5. 설정
           ClosetPage(),
           //CoodinatorPage(), //안준이 작업한 페이지 확인하기 위해 임시 교체
-          RecommendPage(),
+          MyCoordiPage(),
           Container(),
           CoordiEvalPage(),
           MyPage(),
