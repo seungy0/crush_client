@@ -30,6 +30,10 @@ void main() async {
   final firestoreRepository = FirestoreRepository(
     firebaseFirestore: FirebaseFirestore.instance,
   );
+  final coordiRepository = CoordiRepository(
+    firebaseStorage: FirebaseStorage.instance,
+    firebaseFirestore: FirebaseFirestore.instance,
+  );
 
   runZonedGuarded(
     () => runApp(
@@ -37,6 +41,7 @@ void main() async {
         authenticationRepository: authenticationRepository,
         photosRepository: photosRepository,
         firestoreRepository: firestoreRepository,
+        coordiRepository: coordiRepository,
       ),
     ),
     (error, stackTrace) {
