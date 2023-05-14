@@ -12,7 +12,12 @@ class _CoordiEvalPageState extends State<CoordiEvalPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CoordiEvalCard(imageID: 'assets/musinsa.jpg'),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            CoordiEvalCard(imageID: 'assets/musinsa.jpg'),
+          ],
+        ),
       ],
     );
   }
