@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -110,6 +111,22 @@ class AuthenticationRepository {
   // method that return currentUser user email
   String get currentUserEmail {
     return _firebaseAuth.currentUser!.email!;
+  }
+
+  // method that return currentUser age
+  Future<int> get currentUserAge async {
+    final userUid = _firebaseAuth.currentUser!.uid;
+    final userData = await FirebaseFirestore.instance.collection('Users').doc(userUid).get();
+    final age = userData.get('age');
+    return age;
+  }
+
+  // method that return currentUser sex
+  Future<String> get currentUserSex async {
+    final userUid = _firebaseAuth.currentUser!.uid;
+    final userData = await FirebaseFirestore.instance.collection('Users').doc(userUid).get();
+    final sex = userData.get('sex');
+    return sex;
   }
 
   static SnackBar customSnackBar({required String content}) {

@@ -1,6 +1,5 @@
 import 'package:crush_client/closet/view/closet_page.dart';
 import 'package:crush_client/closet/view/cloth_upload_page.dart';
-import 'package:crush_client/closet/view/recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/community/view/coordi_evaluation_page.dart';
@@ -69,13 +68,12 @@ class _MainpageState extends State<Mainpage>
         physics: const NeverScrollableScrollPhysics(), //스크롤 막기
         controller: controller,
         children: [
-          //1. 나의 옷장 and 옷추천 2. 나의 코디 +:[옷, 코디] 사진 추가 4. 다른사람 코디 평가 5. 설정
+          //1. 나의 옷장 & 옷추천 2. 나의 코디 +:[옷, 코디] 추가 4. 코디 평가 5. 설정
           ClosetPage(),
-          //CoodinatorPage(), //안준이 작업한 페이지 확인하기 위해 임시 교체
           MyCoordiPage(),
           Container(),
           CoordiEvalPage(),
-          MyPage(),
+          MyPage(authRepo: context.read<AuthenticationRepository>()),
         ],
       ),
     );

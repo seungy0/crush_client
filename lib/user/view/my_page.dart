@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 
 class MyPage extends StatefulWidget {
-  const MyPage({Key? key}) : super(key: key);
+  final AuthenticationRepository authRepo;
+
+  const MyPage({
+    Key? key,
+    required this.authRepo,
+  }) : super(key: key);
 
   @override
   _MyPageState createState() => _MyPageState();
@@ -24,14 +29,9 @@ class _MyPageState extends State<MyPage> {
   }
 
   Future<void> _getUserInfo() async {
-    final user = FirebaseAuth.instance.currentUser;
-    final userData = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(user!.uid)
-        .get();
-    final name = userData.get('name');
-    final age = userData.get('age');
-    final sex = userData.get('sex');
+    final name = widget.authRepo.currentUserName;
+    final age = await widget.authRepo.currentUserAge;
+    final sex = await widget.authRepo.currentUserSex;
     setState(() {
       _nameController.text = name;
       _ageController.text = age.toString();
@@ -40,8 +40,8 @@ class _MyPageState extends State<MyPage> {
   }
 
   Future<void> _saveUserInfo() async {
-    final user = FirebaseAuth.instance.currentUser;
-    await FirebaseFirestore.instance.collection('Users').doc(user!.uid).update({
+    final userUid = widget.authRepo.currentUser;
+    await FirebaseFirestore.instance.collection('Users').doc(userUid).update({
       'name': _nameController.text,
       'age': int.parse(_ageController.text),
       'sex': _sexValue == '남자' ? 'male' : 'female',
@@ -49,7 +49,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   Future<void> _logout() async {
-    await FirebaseAuth.instance.signOut();
+    await widget.authRepo.signOut(context: context);
   }
 
   @override
@@ -124,33 +124,33 @@ class _MyPageState extends State<MyPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        await _saveUserInfo();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('저장되었습니다.'),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('저장'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: PRIMARY_COLOR,
-                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await _saveUserInfo();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('저장되었습니다.'),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('저장'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PRIMARY_COLOR,
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      )),
                   const SizedBox(width: 16.0),
                   ElevatedButton(
-                    onPressed: () async {
-                      await _logout();
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('로그아웃'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                    )
-                  ),
+                      onPressed: () async {
+                        await _logout();
+                        //destroy all routes and push to login page
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/', (Route<dynamic> route) => false);
+                      },
+                      child: const Text('로그아웃'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                      )),
                 ],
               ),
             ],
