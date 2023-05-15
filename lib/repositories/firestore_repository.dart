@@ -1,11 +1,16 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../closet/model/cloth_model.dart';
 
 class FirestoreRepository {
-  FirestoreRepository({required FirebaseFirestore firebaseFirestore})
-      : _firebaseFirestore = firebaseFirestore;
+  FirestoreRepository({
+    required FirebaseFirestore firebaseFirestore,
+  })  : _firebaseFirestore = firebaseFirestore,
+        _firebaseStorage = firebase_storage.FirebaseStorage.instance;
+
   final FirebaseFirestore _firebaseFirestore;
+  final firebase_storage.FirebaseStorage _firebaseStorage;
 
   /// init Document
   Future<void> initDocument({
@@ -24,18 +29,29 @@ class FirestoreRepository {
   Future<void> addCloth({
     required String uid,
     required Cloth cloth,
+    required File image,
   }) async {
     final autoId = _firebaseFirestore
         .collection('Users')
         .doc(uid)
         .collection('clothes')
         .doc();
+
+    final firebase_storage.Reference storageRef =
+    _firebaseStorage.ref().child('clothes').child(uid).child(cloth.name);
+    final firebase_storage.UploadTask uploadTask =
+    storageRef.putFile(image);
+    final firebase_storage.TaskSnapshot storageSnapshot =
+    await uploadTask.whenComplete(() => null);
+    final String downloadURL = await storageSnapshot.ref.getDownloadURL();
+
     autoId.set({
       'clothId': autoId.id,
       'name': cloth.name,
       'color': cloth.color,
       'type': cloth.type,
       'thickness': cloth.thickness,
+      'image': downloadURL,
     });
   }
 
