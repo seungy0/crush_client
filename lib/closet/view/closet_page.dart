@@ -27,8 +27,9 @@ class _ClosetPageState extends State<ClosetPage>
   Future<List<Cloth>> initCloset() async {
     final clothList = await RepositoryProvider.of<FirestoreRepository>(context)
         .getClothList(
-            uid: RepositoryProvider.of<AuthenticationRepository>(context)
-                .currentUser);
+        uid: RepositoryProvider
+            .of<AuthenticationRepository>(context)
+            .currentUser);
     return clothList;
   }
 
@@ -235,12 +236,13 @@ class _ClosetPageState extends State<ClosetPage>
                         ElevatedButton(
                           onPressed: () async {
                             await RepositoryProvider.of<FirestoreRepository>(
-                                    context)
+                                context)
                                 .removeCloth(
-                                    uid: RepositoryProvider.of<
-                                            AuthenticationRepository>(context)
-                                        .currentUser,
-                                    clothId: cloth.clothId);
+                                uid: RepositoryProvider
+                                    .of<
+                                    AuthenticationRepository>(context)
+                                    .currentUser,
+                                clothId: cloth.clothId);
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -249,7 +251,7 @@ class _ClosetPageState extends State<ClosetPage>
                           child: const Text(
                             '삭제',
                             style:
-                                TextStyle(fontSize: 18.0, color: Colors.blue),
+                            TextStyle(fontSize: 18.0, color: Colors.blue),
                           ),
                         ),
                       ],
@@ -281,9 +283,10 @@ class _ClosetPageState extends State<ClosetPage>
       child: StreamBuilder<List<Cloth>>(
         stream: RepositoryProvider.of<FirestoreRepository>(context)
             .getClothStreamByType(
-                uid: RepositoryProvider.of<AuthenticationRepository>(context)
-                    .currentUser,
-                type: type),
+            uid: RepositoryProvider
+                .of<AuthenticationRepository>(context)
+                .currentUser,
+            type: type),
         builder: (context, clothList) {
           if (clothList.hasError)
             return Center(child: Text('Error: ${clothList.error}'));
@@ -296,30 +299,49 @@ class _ClosetPageState extends State<ClosetPage>
             ),
             itemBuilder: (BuildContext context, int index) {
               final Cloth cloth = clothList.data![index];
-              return GestureDetector(
-                onTap: () {
-                  _showClothDialog(context, cloth);
-                },
-                child: Container(
-                  child: Column(
-                    children: [
-                      Image.network(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(cloth.name),
-                          Text(' '),
-                          Text(cloth.type),
-                        ],
-                      ),
-                    ],
-                  ),
+              const defaultImage= 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
+              return FutureBuilder<String?>(
+                future: RepositoryProvider.of<FirestoreRepository>(context)
+                    .getImageByClothId(
+                  uid: RepositoryProvider
+                      .of<AuthenticationRepository>(context)
+                      .currentUser,
+                  clothId: cloth.clothId,
                 ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final imageUrl = snapshot.data ?? '';
+                    return GestureDetector(
+                      onTap: () {
+                        _showClothDialog(context, cloth);
+                      },
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Image.network(
+                              imageUrl.isEmpty ? defaultImage : imageUrl,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(cloth.name),
+                                Text(' '),
+                                Text(cloth.type),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                },
               );
             },
           );

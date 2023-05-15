@@ -117,4 +117,23 @@ class FirestoreRepository {
         .doc(clothId)
         .delete();
   }
+  Future<String?> getImageByClothId({
+    required String uid,
+    required String clothId,
+  }) async {
+    final snapshot = await _firebaseFirestore
+        .collection('Users')
+        .doc(uid)
+        .collection('clothes')
+        .doc(clothId)
+        .get();
+
+    if (snapshot.exists) {
+      final data = snapshot.data();
+      return data?['image'];
+    }
+
+    return null;
+  }
 }
+
