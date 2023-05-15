@@ -18,6 +18,7 @@ class _ClosetPageState extends State<ClosetPage>
   List<Cloth> clothList = [];
   late TabController _tabController;
 
+
   @override
   void initState() {
     super.initState();
@@ -136,6 +137,7 @@ class _ClosetPageState extends State<ClosetPage>
   }
 
   void _showClothDialog(BuildContext context, Cloth cloth) {
+    const defaultImage= 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -190,10 +192,27 @@ class _ClosetPageState extends State<ClosetPage>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Image.network(
-                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU',
-                              fit: BoxFit.cover,
+                          Center(
+                            child: FutureBuilder<String?>(
+                              future: RepositoryProvider.of<FirestoreRepository>(context).getImageByClothId(
+                                uid: RepositoryProvider.of<AuthenticationRepository>(context).currentUser,
+                                clothId: cloth.clothId,
+                              ),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  final imageUrl = snapshot.data ?? defaultImage;
+                                  return Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height * 0.5,
+                                  );
+                                }
+                              },
                             ),
                           ),
                           const SizedBox(height: 10.0),
