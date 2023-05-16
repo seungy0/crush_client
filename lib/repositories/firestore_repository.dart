@@ -51,7 +51,7 @@ class FirestoreRepository {
       'color': cloth.color,
       'type': cloth.type,
       'thickness': cloth.thickness,
-      'image': downloadURL,
+      'imageURL': downloadURL,
     });
   }
 
@@ -130,7 +130,7 @@ class FirestoreRepository {
 
     if (snapshot.exists) {
       final data = snapshot.data();
-      return data?['image'];
+      return data?['imageURL'];
     }
 
     return null;
