@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crush_client/repositories/repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../common/view/root_tab.dart';
@@ -11,12 +13,15 @@ class AuthenticationRepository {
   const AuthenticationRepository({
     required FirebaseAuth firebaseAuth,
     required GoogleSignIn googleSignIn,
+    required FirestoreRepository firestoreRepository,
   })  : _firebaseAuth = firebaseAuth,
-        _googleSignIn = googleSignIn;
+        _googleSignIn = googleSignIn,
+        _firestoreRepository = firestoreRepository;
 
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   // 여기까지 AuthRepository
+  final FirestoreRepository _firestoreRepository;
 
   Future<void> initializeFirebase({
     required BuildContext context,
@@ -116,7 +121,7 @@ class AuthenticationRepository {
   // method that return currentUser age
   Future<int> get currentUserAge async {
     final userUid = _firebaseAuth.currentUser!.uid;
-    final userData = await FirebaseFirestore.instance.collection('Users').doc(userUid).get();
+    final userData = await _firestoreRepository.getUserData(uid:userUid);
     final age = userData.get('age');
     return age;
   }
@@ -124,7 +129,7 @@ class AuthenticationRepository {
   // method that return currentUser sex
   Future<String> get currentUserSex async {
     final userUid = _firebaseAuth.currentUser!.uid;
-    final userData = await FirebaseFirestore.instance.collection('Users').doc(userUid).get();
+    final userData = await _firestoreRepository.getUserData(uid:userUid);
     final sex = userData.get('sex');
     return sex;
   }

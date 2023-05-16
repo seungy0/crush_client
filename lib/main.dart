@@ -20,15 +20,16 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  final firestoreRepository = FirestoreRepository(
+    firebaseFirestore: FirebaseFirestore.instance,
+  );
   final authenticationRepository = AuthenticationRepository(
     firebaseAuth: FirebaseAuth.instance,
     googleSignIn: GoogleSignIn(),
+    firestoreRepository: firestoreRepository,
   );
   final photosRepository = PhotosRepository(
     firebaseStorage: FirebaseStorage.instance,
-  );
-  final firestoreRepository = FirestoreRepository(
-    firebaseFirestore: FirebaseFirestore.instance,
   );
 
   runZonedGuarded(
