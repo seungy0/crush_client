@@ -10,7 +10,7 @@ class ApiService {
   static final iosIp = '127.0.0.1';
   static final ip = Platform.isAndroid ? androidIp : iosIp;
 
-  static String baseUrl = "http://$ip:8080";
+  static String baseUrl = "http://52.78.216.153";
   static const String recommend = "recommend";
   static const data = {
     "cloths": [

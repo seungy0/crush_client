@@ -1,6 +1,8 @@
 import 'package:crush_client/closet/model/cloth_model.dart';
+import 'package:crush_client/closet/view/cloth_type.dart';
 import 'package:crush_client/closet/view/image_upload.dart';
 import 'package:crush_client/closet/view/my_palette.dart';
+import 'package:crush_client/closet/view/thickness_select.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +19,6 @@ class _ClothInputState extends State<ClothInput> {
   String color = '';
   String type = '';
   String thickness = '';
-  Color selectedColor = Colors.white;
-
-  void _handleColorSelected(Color color) {
-    setState(() {
-      selectedColor = color;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +79,7 @@ class _ClothInputState extends State<ClothInput> {
                           },
                           validator: (val) {
                             if (val.length < 1) {
-                              return '중류는 필수사항입니다.';
+                              return '종류는 필수사항입니다.';
                             }
                             return null;
                           },
@@ -153,12 +148,14 @@ class _ClothInputState extends State<ClothInput> {
     required String label,
     required FormFieldSetter onSaved,
     required FormFieldValidator validator,
+    String? thickness,
   }) {
     assert(onSaved != null);
     assert(validator != null);
 
     if (label == '색깔') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -171,11 +168,64 @@ class _ClothInputState extends State<ClothInput> {
                 ),
               ),
               const SizedBox(width: 10),
-              MyPalette(
-                onSaved: onSaved,
-                onColorSelected: (Color color) {
-                  onSaved(color.toString());
-                },
+              Expanded(
+                child: ColorSelection(
+                  onSaved: onSaved,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 16.0,
+          ),
+        ],
+      );
+    } else if (label == '종류') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TypeSelection(
+                  onSaved: onSaved,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 16.0,
+          ),
+        ],
+      );
+    } else if (label == '두께') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ThickSelection(
+                  onSaved: onSaved,
+                ),
               ),
             ],
           ),
@@ -188,7 +238,7 @@ class _ClothInputState extends State<ClothInput> {
       return Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 label,
