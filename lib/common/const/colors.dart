@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 const P_GREEN = Color(0xFF22A45D);
 //주색상
 const PRIMARY_COLOR = Color(0xFFFFB500);

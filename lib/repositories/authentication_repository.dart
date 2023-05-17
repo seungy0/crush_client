@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crush_client/repositories/repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../common/view/root_tab.dart';
@@ -121,7 +119,7 @@ class AuthenticationRepository {
   // method that return currentUser age
   Future<int> get currentUserAge async {
     final userUid = _firebaseAuth.currentUser!.uid;
-    final userData = await _firestoreRepository.getUserData(uid:userUid);
+    final userData = await _firestoreRepository.getUserData(uid: userUid);
     final age = userData.get('age');
     return age;
   }
@@ -129,7 +127,7 @@ class AuthenticationRepository {
   // method that return currentUser sex
   Future<String> get currentUserSex async {
     final userUid = _firebaseAuth.currentUser!.uid;
-    final userData = await _firestoreRepository.getUserData(uid:userUid);
+    final userData = await _firestoreRepository.getUserData(uid: userUid);
     final sex = userData.get('sex');
     return sex;
   }

@@ -1,6 +1,8 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 import '../closet/model/cloth_model.dart';
 
 class FirestoreRepository {
@@ -28,7 +30,8 @@ class FirestoreRepository {
 
   /// get User Data
   Future<DocumentSnapshot> getUserData({required String uid}) async {
-    final userData = await _firebaseFirestore.collection('Users').doc(uid).get();
+    final userData =
+        await _firebaseFirestore.collection('Users').doc(uid).get();
     return userData;
   }
 
@@ -44,11 +47,10 @@ class FirestoreRepository {
         .doc();
 
     final firebase_storage.Reference storageRef =
-    _firebaseStorage.ref().child('clothes').child(uid).child(cloth.name);
-    final firebase_storage.UploadTask uploadTask =
-    storageRef.putFile(image);
+        _firebaseStorage.ref().child('clothes').child(uid).child(cloth.name);
+    final firebase_storage.UploadTask uploadTask = storageRef.putFile(image);
     final firebase_storage.TaskSnapshot storageSnapshot =
-    await uploadTask.whenComplete(() => null);
+        await uploadTask.whenComplete(() => null);
     final String downloadURL = await storageSnapshot.ref.getDownloadURL();
 
     autoId.set({
@@ -123,6 +125,7 @@ class FirestoreRepository {
         .doc(clothId)
         .delete();
   }
+
   Future<String?> getImageByClothId({
     required String uid,
     required String clothId,
@@ -142,4 +145,3 @@ class FirestoreRepository {
     return null;
   }
 }
-

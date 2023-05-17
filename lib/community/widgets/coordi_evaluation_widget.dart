@@ -30,8 +30,8 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 800),
       curve: Curves.easeOutCubic,
-      transform: Matrix4.translationValues(
-          widget.selected ? screenWidth : 0, widget.selected ? -screenHeight*0.15 : 0, 0),
+      transform: Matrix4.translationValues(widget.selected ? screenWidth : 0,
+          widget.selected ? -screenHeight * 0.15 : 0, 0),
       child: Expanded(
         child: Container(
           clipBehavior: Clip.hardEdge,

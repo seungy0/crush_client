@@ -1,7 +1,6 @@
 import 'package:crush_client/common/const/colors.dart';
 import 'package:flutter/material.dart';
 
-
 class CustomTeextFormField extends StatelessWidget {
   final String? hintText;
   final String? errorText;
@@ -9,13 +8,14 @@ class CustomTeextFormField extends StatelessWidget {
   final bool autofocus;
   final ValueChanged<String>? onChanged;
 
-  const CustomTeextFormField({
-    this.hintText,
-    this.errorText,
-    this.obscureText = false,
-    this.autofocus = false,
-    required this.onChanged,
-    Key? key}) : super(key: key);
+  const CustomTeextFormField(
+      {this.hintText,
+      this.errorText,
+      this.obscureText = false,
+      this.autofocus = false,
+      required this.onChanged,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +40,16 @@ class CustomTeextFormField extends StatelessWidget {
             fontSize: 14.0,
           ),
           fillColor: INPUT_BG_COLOR,
-          filled: true, //배경색 채우기 true로 해야 나옴
+          filled: true,
+          //배경색 채우기 true로 해야 나옴
           //모든 Input 상태의 기본 스타일 세팅
           border: baseBorder,
           enabledBorder: baseBorder,
           focusedBorder: baseBorder.copyWith(
-            borderSide : baseBorder.borderSide.copyWith(
+            borderSide: baseBorder.borderSide.copyWith(
               color: PRIMARY_COLOR,
             ),
           ), //포커스 상태의 스타일 세팅
-        )
-    );
+        ));
   }
 }
