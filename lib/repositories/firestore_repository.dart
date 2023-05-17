@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +14,7 @@ class FirestoreRepository {
 
   final FirebaseFirestore _firebaseFirestore;
   final firebase_storage.FirebaseStorage _firebaseStorage;
+  List<Cloth> _allClothes = [];
 
   /// init Document
   Future<void> initDocument({
@@ -85,32 +87,28 @@ class FirestoreRepository {
   }
 
   /// get Cloth Stream
-  Stream<List<Cloth>> getClothStream({required String uid}) {
-    return _firebaseFirestore
-        .collection('Users')
-        .doc(uid)
-        .collection('clothes')
-        .snapshots()
-        .map((clothList) => clothList.docs
-            .map((cloth) => Cloth.fromJson(cloth.data()))
-            .toList());
-  }
-
-  // get Cloth Stream by type
-  Stream<List<Cloth>> getClothStreamByType({
+  Stream<List<Cloth>> getClothStream({
     required String uid,
     required String type,
   }) {
-    if (type == '전체') return getClothStream(uid: uid);
-    return _firebaseFirestore
-        .collection('Users')
-        .doc(uid)
-        .collection('clothes')
-        .where('type', isEqualTo: type)
-        .snapshots()
-        .map((clothList) => clothList.docs
-            .map((cloth) => Cloth.fromJson(cloth.data()))
-            .toList());
+    if (type == '전체') {
+      return _firebaseFirestore
+          .collection('Users')
+          .doc(uid)
+          .collection('clothes')
+          .snapshots()
+          .map((clothList) => clothList.docs
+              .map((cloth) => Cloth.fromJson(cloth.data()))
+              .toList())
+          .transform(StreamTransformer.fromHandlers(
+        handleData: (clothList, sink) {
+          _allClothes = clothList; // 전체 옷 데이터 저장
+          sink.add(clothList);
+        },
+      ));
+    } else {
+      return Stream.value(_allClothes);
+    }
   }
 
   /// remove Cloth
@@ -144,4 +142,6 @@ class FirestoreRepository {
 
     return null;
   }
+
+  List<Cloth> get allClothes => _allClothes;
 }

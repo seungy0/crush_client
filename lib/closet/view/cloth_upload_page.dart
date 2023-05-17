@@ -23,13 +23,6 @@ class _ClothInputState extends State<ClothInput> {
   String thickness = '';
 
   File _imageFile = File('');
-  Color selectedColor = Colors.white;
-
-  void _handleColorSelected(Color color) {
-    setState(() {
-      selectedColor = color;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
