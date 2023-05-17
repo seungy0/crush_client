@@ -66,7 +66,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Row(),
               _user.photoURL != null
                   ? ClipOval(
                       child: Material(

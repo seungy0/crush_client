@@ -26,6 +26,12 @@ class FirestoreRepository {
     }, SetOptions(merge: true));
   }
 
+  /// get User Data
+  Future<DocumentSnapshot> getUserData({required String uid}) async {
+    final userData = await _firebaseFirestore.collection('Users').doc(uid).get();
+    return userData;
+  }
+
   Future<void> addCloth({
     required String uid,
     required Cloth cloth,

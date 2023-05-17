@@ -77,7 +77,6 @@ class _SignInScreenState extends State<SignInScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Row(),
         Center(
           child: FutureBuilder(
             future: RepositoryProvider.of<AuthenticationRepository>(context)

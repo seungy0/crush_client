@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 
-class ColorSelection extends StatefulWidget {
+class TypeSelection extends StatefulWidget {
   final ValueChanged<String> onSaved;
 
-  const ColorSelection({Key? key, required this.onSaved}) : super(key: key);
+  const TypeSelection({Key? key, required this.onSaved}) : super(key: key);
 
   @override
-  _ColorSelectionState createState() => _ColorSelectionState();
+  _TypeSelectionState createState() => _TypeSelectionState();
 }
 
-class _ColorSelectionState extends State<ColorSelection> {
-  String selectedColorName = '검정';
+class _TypeSelectionState extends State<TypeSelection> {
+  String selectedTypeName = '티셔츠';
 
-  final List<Map<String, dynamic>> colors = [
-    {'name': '검정', 'color': Colors.black},
-    {'name': '빨강', 'color': Colors.red},
-    {'name': '주황', 'color': Colors.orange},
-    {'name': '노랑', 'color': Colors.yellow},
-    {'name': '초록', 'color': Colors.green},
-    {'name': '파랑', 'color': Colors.blue},
-    {'name': '남색', 'color': Colors.indigo},
-    {'name': '보라', 'color': Colors.purple},
-    {'name': '핑크', 'color': Colors.pink},
-    {'name': '회색', 'color': Colors.grey},
-    {'name': '하양', 'color': Colors.white},
-    {'name': '갈색', 'color': Colors.brown},
-    {'name': '라임', 'color': Colors.lime},
-    {'name': '청록', 'color': Colors.cyan},
-    {'name': '자주', 'color': Colors.deepPurple},
+  final List<Map<String, dynamic>> Types = [
+    {'name': '티셔츠'},
+    {'name': '맨투맨'},
+    {'name': '후드티'},
+    {'name': '셔츠'},
+    {'name': '니트'},
+    {'name': '카디건'},
+    {'name': '자켓'},
+    {'name': '블레이저'},
+    {'name': '롱코트'},
+    {'name': '패딩'},
+    {'name': '바람막이'},
+    {'name': '청바지'},
+    {'name': '슬랙스'},
+    {'name': '조거팬츠'},
+    {'name': '신발'},
+    {'name': '안경'},
   ];
 
-  bool showColorPicker = false;
+  bool showTypePicker = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +41,14 @@ class _ColorSelectionState extends State<ColorSelection> {
         GestureDetector(
           onTap: () {
             setState(() {
-              showColorPicker = !showColorPicker;
+              showTypePicker = !showTypePicker;
             });
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                width: 12.0,
-                height: 12.0,
-                decoration: BoxDecoration(
-                  color: colors
-                      .where((color) => color['name'] == selectedColorName)
-                      .first['color'],
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              const SizedBox(width: 8.0),
               Text(
-                selectedColorName,
+                selectedTypeName,
                 style: const TextStyle(
                   fontSize: 12.0,
                   fontWeight: FontWeight.w700,
@@ -72,27 +62,27 @@ class _ColorSelectionState extends State<ColorSelection> {
             ],
           ),
         ),
-        showColorPicker
+        showTypePicker
             ? SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.3,
                 child: Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
-                  children: colors.map((color) {
+                  children: Types.map((Type) {
                     return SizedBox(
-                      width: 60.0,
+                      width: 80,
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            selectedColorName = color['name'];
-                            widget.onSaved(color['name']);
-                            showColorPicker = false;
+                            selectedTypeName = Type['name'];
+                            widget.onSaved(Type['name']);
+                            showTypePicker = false;
                           });
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 8),
-                          backgroundColor: selectedColorName == color['name']
+                          backgroundColor: selectedTypeName == Type['name']
                               ? Colors.grey[200]
                               : Colors.white,
                           foregroundColor: Colors.black,
@@ -107,17 +97,8 @@ class _ColorSelectionState extends State<ColorSelection> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 12.0,
-                              height: 12.0,
-                              decoration: BoxDecoration(
-                                color: color['color'],
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                            ),
-                            const SizedBox(width: 4.0),
                             Text(
-                              color['name'],
+                              Type['name'],
                               style: const TextStyle(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w700,
