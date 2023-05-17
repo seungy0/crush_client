@@ -18,7 +18,7 @@ class _SignInWithVideoState extends State<SignInWithVideo> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset("assets/sample_video.mp4")
+    _controller = VideoPlayerController.asset("assets/sample_video_low.mp4")
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
@@ -40,7 +40,7 @@ class _SignInWithVideoState extends State<SignInWithVideo> {
             children: <Widget>[
               SizedBox.expand(
                 child: FittedBox(
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   child: SizedBox(
                     width: _controller.value.size?.width ?? 0,
                     height: _controller.value.size?.height ?? 0,
