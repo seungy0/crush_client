@@ -10,10 +10,16 @@ class CoordiEvalPage extends StatefulWidget {
 class _CoordiEvalPageState extends State<CoordiEvalPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CoordiEvalCard(imageID: 'assets/musinsa.jpg'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Center(
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            CoordiEvalCard(imageID: 'assets/musinsa.jpg'),
+          ],
+        ),
+      ),
     );
   }
 }
