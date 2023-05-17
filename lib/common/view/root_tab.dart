@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../coordinator/view/my_coodinator_page.dart';
+import '../../coordinator/view/my_coordi_upload.dart';
 
 class Mainpage extends StatefulWidget {
   const Mainpage({Key? key, required User user}) : super(key: key);
@@ -162,7 +163,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ),
         SimpleDialogOption(
           onPressed: () {
-            //Navigator.pop(context); 기능구현 후에 추가
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyCoordiUpload()),
+            );
           },
           child: const Text('나의 코디 & 패션'),
         ),

@@ -8,12 +8,14 @@ class App extends StatelessWidget {
     required this.authenticationRepository,
     required this.photosRepository,
     required this.firestoreRepository,
+    required this.coordiRepository,
     super.key,
   });
 
   final AuthenticationRepository authenticationRepository;
   final PhotosRepository photosRepository;
   final FirestoreRepository firestoreRepository;
+  final CoordiRepository coordiRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: authenticationRepository),
         RepositoryProvider.value(value: photosRepository),
         RepositoryProvider.value(value: firestoreRepository),
+        RepositoryProvider.value(value: coordiRepository),
       ],
       child: _App(),
     );
