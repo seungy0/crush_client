@@ -18,7 +18,6 @@ class _ClosetPageState extends State<ClosetPage>
   List<Cloth> clothList = [];
   late TabController _tabController;
 
-
   @override
   void initState() {
     super.initState();
@@ -28,9 +27,8 @@ class _ClosetPageState extends State<ClosetPage>
   Future<List<Cloth>> initCloset() async {
     final clothList = await RepositoryProvider.of<FirestoreRepository>(context)
         .getClothList(
-        uid: RepositoryProvider
-            .of<AuthenticationRepository>(context)
-            .currentUser);
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                .currentUser);
     return clothList;
   }
 
@@ -115,7 +113,7 @@ class _ClosetPageState extends State<ClosetPage>
                       MaterialPageRoute(builder: (context) => RecommendPage()),
                     );
                   },
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 2.5, vertical: 8),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -137,7 +135,8 @@ class _ClosetPageState extends State<ClosetPage>
   }
 
   void _showClothDialog(BuildContext context, Cloth cloth) {
-    const defaultImage= 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
+    const defaultImage =
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -194,22 +193,30 @@ class _ClosetPageState extends State<ClosetPage>
                         children: [
                           Center(
                             child: FutureBuilder<String?>(
-                              future: RepositoryProvider.of<FirestoreRepository>(context).getImageByClothId(
-                                uid: RepositoryProvider.of<AuthenticationRepository>(context).currentUser,
+                              future:
+                                  RepositoryProvider.of<FirestoreRepository>(
+                                          context)
+                                      .getImageByClothId(
+                                uid: RepositoryProvider.of<
+                                        AuthenticationRepository>(context)
+                                    .currentUser,
                                 clothId: cloth.clothId,
                               ),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
                                   return CircularProgressIndicator();
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  final imageUrl = snapshot.data ?? defaultImage;
+                                  final imageUrl =
+                                      snapshot.data ?? defaultImage;
                                   return Image.network(
                                     imageUrl,
                                     fit: BoxFit.cover,
                                     width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.height * 0.5,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
                                   );
                                 }
                               },
@@ -255,13 +262,12 @@ class _ClosetPageState extends State<ClosetPage>
                         ElevatedButton(
                           onPressed: () async {
                             await RepositoryProvider.of<FirestoreRepository>(
-                                context)
+                                    context)
                                 .removeCloth(
-                                uid: RepositoryProvider
-                                    .of<
-                                    AuthenticationRepository>(context)
-                                    .currentUser,
-                                clothId: cloth.clothId);
+                                    uid: RepositoryProvider.of<
+                                            AuthenticationRepository>(context)
+                                        .currentUser,
+                                    clothId: cloth.clothId);
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -270,7 +276,7 @@ class _ClosetPageState extends State<ClosetPage>
                           child: const Text(
                             '삭제',
                             style:
-                            TextStyle(fontSize: 18.0, color: Colors.blue),
+                                TextStyle(fontSize: 18.0, color: Colors.blue),
                           ),
                         ),
                       ],
@@ -302,10 +308,9 @@ class _ClosetPageState extends State<ClosetPage>
       child: StreamBuilder<List<Cloth>>(
         stream: RepositoryProvider.of<FirestoreRepository>(context)
             .getClothStreamByType(
-            uid: RepositoryProvider
-                .of<AuthenticationRepository>(context)
-                .currentUser,
-            type: type),
+                uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                    .currentUser,
+                type: type),
         builder: (context, clothList) {
           if (clothList.hasError)
             return Center(child: Text('Error: ${clothList.error}'));
@@ -318,12 +323,12 @@ class _ClosetPageState extends State<ClosetPage>
             ),
             itemBuilder: (BuildContext context, int index) {
               final Cloth cloth = clothList.data![index];
-              const defaultImage= 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
+              const defaultImage =
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
               return FutureBuilder<String?>(
                 future: RepositoryProvider.of<FirestoreRepository>(context)
                     .getImageByClothId(
-                  uid: RepositoryProvider
-                      .of<AuthenticationRepository>(context)
+                  uid: RepositoryProvider.of<AuthenticationRepository>(context)
                       .currentUser,
                   clothId: cloth.clothId,
                 ),

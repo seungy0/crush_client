@@ -1,7 +1,7 @@
 import 'dart:io';
+
 import 'package:crush_client/closet/model/cloth_model.dart';
 import 'package:crush_client/closet/view/cloth_type.dart';
-import 'package:crush_client/closet/view/image_upload.dart';
 import 'package:crush_client/closet/view/my_palette.dart';
 import 'package:crush_client/closet/view/thickness_select.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
@@ -22,7 +22,7 @@ class _ClothInputState extends State<ClothInput> {
   String type = '';
   String thickness = '';
 
-  File _imageFile=File('');
+  File _imageFile = File('');
   Color selectedColor = Colors.white;
 
   void _handleColorSelected(Color color) {
@@ -41,33 +41,33 @@ class _ClothInputState extends State<ClothInput> {
             const SizedBox(
               height: 20,
             ),
-        GestureDetector(
-          onTap: () async {
-            final imageFile =
-            await ImagePicker().pickImage(source: ImageSource.gallery);
-            setState(() {
-              if (imageFile != null) {
-                _imageFile = File(imageFile.path);
-              }
-            });
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: MediaQuery.of(context).size.height * 0.45,
-              color: Colors.grey,
-              child: _imageFile != null
-                  ? Image.file(
-                File(_imageFile!.path),
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: MediaQuery.of(context).size.height * 0.45,
-              )
-                  : const Icon(Icons.camera_alt),
+            GestureDetector(
+              onTap: () async {
+                final imageFile =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                setState(() {
+                  if (imageFile != null) {
+                    _imageFile = File(imageFile.path);
+                  }
+                });
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  color: Colors.grey,
+                  child: _imageFile != null
+                      ? Image.file(
+                          File(_imageFile!.path),
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: MediaQuery.of(context).size.height * 0.45,
+                        )
+                      : const Icon(Icons.camera_alt),
+                ),
+              ),
             ),
-          ),
-        ),
             Container(
               child: Form(
                 key: this.ClothKey,
