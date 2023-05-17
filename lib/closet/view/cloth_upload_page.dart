@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:crush_client/closet/model/cloth_model.dart';
 import 'package:crush_client/closet/view/cloth_type.dart';
 import 'package:crush_client/closet/view/image_upload.dart';
@@ -7,6 +8,7 @@ import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ClothInput extends StatefulWidget {
   @override
@@ -20,6 +22,15 @@ class _ClothInputState extends State<ClothInput> {
   String type = '';
   String thickness = '';
 
+  File _imageFile=File('');
+  Color selectedColor = Colors.white;
+
+  void _handleColorSelected(Color color) {
+    setState(() {
+      selectedColor = color;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -30,7 +41,33 @@ class _ClothInputState extends State<ClothInput> {
             const SizedBox(
               height: 20,
             ),
-            ImageUploadBox(),
+        GestureDetector(
+          onTap: () async {
+            final imageFile =
+            await ImagePicker().pickImage(source: ImageSource.gallery);
+            setState(() {
+              if (imageFile != null) {
+                _imageFile = File(imageFile.path);
+              }
+            });
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: MediaQuery.of(context).size.height * 0.45,
+              color: Colors.grey,
+              child: _imageFile != null
+                  ? Image.file(
+                File(_imageFile!.path),
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.height * 0.45,
+              )
+                  : const Icon(Icons.camera_alt),
+            ),
+          ),
+        ),
             Container(
               child: Form(
                 key: this.ClothKey,
@@ -125,6 +162,7 @@ class _ClothInputState extends State<ClothInput> {
           RepositoryProvider.of<FirestoreRepository>(context).addCloth(
               uid: RepositoryProvider.of<AuthenticationRepository>(context)
                   .currentUser,
+              image: _imageFile,
               cloth: Cloth(
                 clothId: '',
                 name: name,
@@ -132,6 +170,7 @@ class _ClothInputState extends State<ClothInput> {
                 type: type,
                 thickness: thickness,
               ));
+
           Navigator.pop(context, true);
         }
       },
