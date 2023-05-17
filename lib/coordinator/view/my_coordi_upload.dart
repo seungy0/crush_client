@@ -47,7 +47,7 @@ class _MyCoordiUploadState extends State<MyCoordiUpload> {
                               width: MediaQuery.of(context).size.width * 0.7,
                               height: MediaQuery.of(context).size.height * 0.45,
                             )
-                          : Icon(Icons.camera_alt),
+                          : const Icon(Icons.camera_alt),
                     ),
                   ),
                 ),

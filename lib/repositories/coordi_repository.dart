@@ -19,9 +19,12 @@ class CoordiRepository {
     required String description,
   }) async {
     try {
-      // 파일 위치에 대한 참조 생성, !!수정필요
+      //get image file's name
+      String fileName = image.path.split('/').last;
+
+      // 파일 위치에 대한 참조 생성
       Reference ref =
-      _firebaseStorage.ref().child('coordi').child(uid).child(title);
+      _firebaseStorage.ref().child('coordi').child(uid).child(fileName);
 
       // 참조 위치에 파일 업로드
       UploadTask uploadTask = ref.putFile(image);
@@ -32,6 +35,7 @@ class CoordiRepository {
 
       // MyOutfits 컬렉션에 문서 생성
       await _firebaseFirestore.collection('MyOutfits').add({
+        'title' : title,
         'ownerId': uid,
         'photoUrl': url,
         'description': description,
