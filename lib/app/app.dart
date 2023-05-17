@@ -34,9 +34,12 @@ class App extends StatelessWidget {
 class _App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Crush',
-      home: SignInWithVideo(),
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/': (context) => SignInWithVideo(),
+      },
     );
   }
 }

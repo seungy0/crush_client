@@ -1,5 +1,6 @@
 import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:flutter/material.dart';
+
 import '../widget/my_coordi_card.dart';
 
 class MyCoordiPage extends StatelessWidget {
@@ -19,13 +20,13 @@ class MyCoordiPage extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 10.0,
                   mainAxisSpacing: 10.0,
-                  childAspectRatio: 3/4,
+                  childAspectRatio: 3 / 4,
                 ),
                 delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                  (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                         _showCoordiDialog(context, index);
+                        _showCoordiDialog(context, index);
                       },
                       child: MyCoordiCard(),
                     );
@@ -83,7 +84,6 @@ class MyCoordiPage extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.all(16.0),
                   ),
-
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -119,7 +119,8 @@ class MyCoordiPage extends StatelessWidget {
                                   left: 20.0,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: const [
                                       Text(
                                         'MUSINSA\'S PICK',
@@ -150,8 +151,6 @@ class MyCoordiPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
-
                   const SizedBox(height: 16.0),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -168,7 +167,7 @@ class MyCoordiPage extends StatelessWidget {
                           child: const Text(
                             '삭제',
                             style:
-                            TextStyle(fontSize: 18.0, color: Colors.black),
+                                TextStyle(fontSize: 18.0, color: Colors.black),
                           ),
                         ),
                       ],
@@ -193,5 +192,4 @@ class MyCoordiPage extends StatelessWidget {
       },
     );
   }
-
 }

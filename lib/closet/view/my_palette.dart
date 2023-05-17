@@ -1,115 +1,137 @@
 import 'package:flutter/material.dart';
 
-class MyPalette extends StatefulWidget {
-  final ValueChanged<Color> onColorSelected;
-  final FormFieldSetter<String>? onSaved;
+class ColorSelection extends StatefulWidget {
+  final ValueChanged<String> onSaved;
 
-  MyPalette({required this.onColorSelected, this.onSaved});
+  const ColorSelection({Key? key, required this.onSaved}) : super(key: key);
 
   @override
-  _MyPaletteState createState() => _MyPaletteState();
+  _ColorSelectionState createState() => _ColorSelectionState();
 }
 
-class _MyPaletteState extends State<MyPalette> {
-  final List<Color> _colors = [
-    Colors.red,
-    Colors.orange,
-    Colors.yellow,
-    Colors.green,
-    Colors.blue,
-    Colors.indigo,
-    Colors.purple,
-    Colors.pink,
-    Colors.brown,
-    Colors.grey,
-    Colors.black,
-    Colors.white,
+class _ColorSelectionState extends State<ColorSelection> {
+  String selectedColorName = '검정';
+
+  final List<Map<String, dynamic>> colors = [
+    {'name': '검정', 'color': Colors.black},
+    {'name': '빨강', 'color': Colors.red},
+    {'name': '주황', 'color': Colors.orange},
+    {'name': '노랑', 'color': Colors.yellow},
+    {'name': '초록', 'color': Colors.green},
+    {'name': '파랑', 'color': Colors.blue},
+    {'name': '남색', 'color': Colors.indigo},
+    {'name': '보라', 'color': Colors.purple},
+    {'name': '핑크', 'color': Colors.pink},
+    {'name': '회색', 'color': Colors.grey},
+    {'name': '하양', 'color': Colors.white},
+    {'name': '갈색', 'color': Colors.brown},
+    {'name': '라임', 'color': Colors.lime},
+    {'name': '청록', 'color': Colors.cyan},
+    {'name': '자주', 'color': Colors.deepPurple},
   ];
 
-  final List<String> _colorNames = [
-    'Red',
-    'Orange',
-    'Yellow',
-    'Green',
-    'Blue',
-    'Indigo',
-    'Purple',
-    'Pink',
-    'Brown',
-    'Grey',
-    'Black',
-    'White',
-  ];
-
-  Color _selectedColor = Colors.white;
-
-  void _handleColorSelected(Color color) {
-    setState(() {
-      _selectedColor = color;
-    });
-    final colorName = _colorNames[_colors.indexOf(color)];
-    widget.onColorSelected(color);
-    if (widget.onSaved != null) {
-      widget.onSaved!(colorName);
-    }
-  }
+  bool showColorPicker = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final color = await showDialog<Color>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('색상 선택'),
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: GridView.count(
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  padding: EdgeInsets.all(8),
-                  children: _colors.map((color) {
-                    return GestureDetector(
-                      onTap: () {
-                        _handleColorSelected(color);
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: color,
-                          borderRadius: BorderRadius.circular(8),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              showColorPicker = !showColorPicker;
+            });
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                width: 12.0,
+                height: 12.0,
+                decoration: BoxDecoration(
+                  color: colors
+                      .where((color) => color['name'] == selectedColorName)
+                      .first['color'],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              Text(
+                selectedColorName,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              const Icon(
+                Icons.arrow_drop_down,
+                size: 24.0,
+              ),
+            ],
+          ),
+        ),
+        showColorPicker
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: colors.map((color) {
+                    return SizedBox(
+                      width: 60.0,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedColorName = color['name'];
+                            widget.onSaved(color['name']);
+                            showColorPicker = false;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 8),
+                          backgroundColor: selectedColorName == color['name']
+                              ? Colors.grey[200]
+                              : Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side: BorderSide(
+                              color: Colors.grey[50] as Color,
+                              width: 1.0,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 12.0,
+                              height: 12.0,
+                              decoration: BoxDecoration(
+                                color: color['color'],
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text(
+                              color['name'],
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
                   }).toList(),
                 ),
-              ),
-            );
-          },
-        );
-        if (color != null) {
-          _handleColorSelected(color);
-        }
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.84,
-        height: MediaQuery.of(context).size.width * 0.12,
-        decoration: BoxDecoration(
-          color: _selectedColor,
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
+              )
+            : Container(),
+      ],
     );
-  }
-
-  String? validator(String? value) {
-    if (_selectedColor != null &&
-        value == _colorNames[_colors.indexOf(_selectedColor)]) {
-      return null;
-    } else {
-      return '색상을 선택해주세요.';
-    }
   }
 }
