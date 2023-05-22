@@ -20,12 +20,17 @@ class FirestoreRepository {
     required String name,
     required String email,
   }) async {
-    await _firebaseFirestore.collection('Users').doc(document).set({
-      'name': name,
-      'email': email,
-      'age': 26, // TODO: 나이 입력받기
-      'sex': 'male', // TODO: 성별 입력받기
-    }, SetOptions(merge: true));
+    DocumentSnapshot docSnapshot =
+        await _firebaseFirestore.collection('Users').doc(document).get();
+
+    if (!docSnapshot.exists) {
+      await _firebaseFirestore.collection('Users').doc(document).set({
+        'name': name,
+        'email': email,
+        'age': 26,
+        'sex': 'male',
+      }, SetOptions(merge: true));
+    }
   }
 
   /// get User Data
