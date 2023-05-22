@@ -65,14 +65,14 @@ class _MainpageState extends State<Mainpage>
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      title: '나의 옷장',
+    return Scaffold(
+      //title: '나의 옷장',
       bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: index,
           onTap: (int index) {
             controller.animateTo(index);
           }),
-      child: TabBarView(
+      body: TabBarView(
         physics: const NeverScrollableScrollPhysics(), //스크롤 막기
         controller: controller,
         children: [

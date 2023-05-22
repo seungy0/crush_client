@@ -41,6 +41,7 @@ class _ClosetPageState extends State<ClosetPage>
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
+      title: '나의 옷장',
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
