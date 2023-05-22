@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../closet/model/cloth_model.dart';
 
@@ -9,10 +9,10 @@ class FirestoreRepository {
   FirestoreRepository({
     required FirebaseFirestore firebaseFirestore,
   })  : _firebaseFirestore = firebaseFirestore,
-        _firebaseStorage = firebase_storage.FirebaseStorage.instance;
+        _firebaseStorage = FirebaseStorage.instance;
 
   final FirebaseFirestore _firebaseFirestore;
-  final firebase_storage.FirebaseStorage _firebaseStorage;
+  final FirebaseStorage _firebaseStorage;
 
   /// init Document
   Future<void> initDocument({
@@ -40,6 +40,7 @@ class FirestoreRepository {
     return userData;
   }
 
+  /// add Cloth
   Future<void> addCloth({
     required String uid,
     required Cloth cloth,
@@ -51,10 +52,14 @@ class FirestoreRepository {
         .collection('clothes')
         .doc();
 
-    final firebase_storage.Reference storageRef =
-        _firebaseStorage.ref().child('clothes').child(uid).child(cloth.name);
-    final firebase_storage.UploadTask uploadTask = storageRef.putFile(image);
-    final firebase_storage.TaskSnapshot storageSnapshot =
+    String fileName = image.path.split('/').last;
+
+    Reference storageRef =
+        _firebaseStorage.ref().child('clothes').child(uid).child(fileName);
+
+    UploadTask uploadTask = storageRef.putFile(image);
+
+    final TaskSnapshot storageSnapshot =
         await uploadTask.whenComplete(() => null);
     final String downloadURL = await storageSnapshot.ref.getDownloadURL();
 
@@ -101,7 +106,7 @@ class FirestoreRepository {
             .toList());
   }
 
-  // get Cloth Stream by type
+  /// get Cloth Stream by type
   Stream<List<Cloth>> getClothStreamByType({
     required String uid,
     required String type,
