@@ -28,18 +28,25 @@ class _MainpageState extends State<Mainpage>
   @override
   void initState() {
     super.initState();
-    // FirebaseRepository의 initDocument 메서드 호출
-    RepositoryProvider.of<FirestoreRepository>(context).initDocument(
-      document:
-          RepositoryProvider.of<AuthenticationRepository>(context).currentUser,
-      name: RepositoryProvider.of<AuthenticationRepository>(context)
-          .currentUserName,
-      email: RepositoryProvider.of<AuthenticationRepository>(context)
-          .currentUserEmail,
-    );
+    initUserDocument(); // FirebaseRepository의 initDocument 메서드 호출
 
     controller = TabController(length: 5, vsync: this);
     controller.addListener(tabListener);
+  }
+
+  Future<void> initUserDocument() async {
+    final authRepo = RepositoryProvider.of<AuthenticationRepository>(context);
+    final firestoreRepo = RepositoryProvider.of<FirestoreRepository>(context);
+
+    String uid = authRepo.currentUser;
+    String defaultName = await authRepo.currentUserName;
+    String email = authRepo.currentUserEmail;
+
+    await firestoreRepo.initDocument(
+      document: uid,
+      defaultName: defaultName,
+      email: email,
+    );
   }
 
   @override

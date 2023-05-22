@@ -21,7 +21,6 @@ class _MyPageState extends State<MyPage> {
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   String _sexValue = '';
-  //bool _isLoading = true; FutureBuilder+setState()로 인해 무한로딩되는거 방지
 
   Future<void>? _loadFuture;
 
@@ -32,14 +31,13 @@ class _MyPageState extends State<MyPage> {
   }
 
   Future<void> _getUserInfo() async {
-    final name = widget.authRepo.currentUserName;
+    final name = await widget.authRepo.currentUserName;
     final age = await widget.authRepo.currentUserAge;
     final sex = await widget.authRepo.currentUserSex;
     setState(() {
       _nameController.text = name;
       _ageController.text = age.toString();
       _sexValue = sex == 'male' ? '남자' : '여자';
-      //_isLoading = false;
     });
   }
 
@@ -66,7 +64,7 @@ class _MyPageState extends State<MyPage> {
             future: _loadFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Scaffold(
+                return const Scaffold(
                   body: Center(child: CircularProgressIndicator()),
                 );
               } else {
@@ -154,11 +152,11 @@ class _MyPageState extends State<MyPage> {
                       );
                     }
                   },
-                  child: const Text('저장'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: PRIMARY_COLOR,
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  )),
+                  ),
+                  child: const Text('저장')),
               const SizedBox(width: 16.0),
               ElevatedButton(
                   onPressed: () async {
@@ -166,10 +164,10 @@ class _MyPageState extends State<MyPage> {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/', (Route<dynamic> route) => false);
                   },
-                  child: const Text('로그아웃'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
-                  )),
+                  ),
+                  child: const Text('로그아웃')),
             ],
           ),
         ],

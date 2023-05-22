@@ -17,7 +17,7 @@ class FirestoreRepository {
   /// init Document
   Future<void> initDocument({
     required String document,
-    required String name,
+    required String defaultName,
     required String email,
   }) async {
     DocumentSnapshot docSnapshot =
@@ -25,7 +25,7 @@ class FirestoreRepository {
 
     if (!docSnapshot.exists) {
       await _firebaseFirestore.collection('Users').doc(document).set({
-        'name': name,
+        'name': defaultName,
         'email': email,
         'age': 26,
         'sex': 'male',
