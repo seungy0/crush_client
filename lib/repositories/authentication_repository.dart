@@ -83,6 +83,14 @@ class AuthenticationRepository {
       }
     }
 
+    if(user != null){
+      await _firestoreRepository.initDocument(
+          document: user.uid,
+          defaultName: user.displayName ?? '',
+          email: user.email ?? '',
+      );
+    }
+
     return user;
   }
 
@@ -107,8 +115,11 @@ class AuthenticationRepository {
   }
 
   // method that return currentUser user name
-  String get currentUserName {
-    return _firebaseAuth.currentUser!.displayName!;
+  Future<String> get currentUserName async {
+    final userUid = currentUser;
+    final userData = await _firestoreRepository.getUserData(uid:userUid);
+    final name = userData.get('name');
+    return name;
   }
 
   // method that return currentUser user email

@@ -17,12 +17,12 @@ class ClothInput extends StatefulWidget {
 
 class _ClothInputState extends State<ClothInput> {
   final ClothKey = GlobalKey<FormState>();
+  final ImagePicker _picker = ImagePicker();
   String name = '';
   String color = '';
   String type = '';
   String thickness = '';
-
-  File _imageFile = File('');
+  XFile? _imageFile;
   Color selectedColor = Colors.white;
 
   void _handleColorSelected(Color color) {
@@ -43,13 +43,9 @@ class _ClothInputState extends State<ClothInput> {
             ),
             GestureDetector(
               onTap: () async {
-                final imageFile =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                setState(() {
-                  if (imageFile != null) {
-                    _imageFile = File(imageFile.path);
-                  }
-                });
+                _imageFile =
+                    await _picker.pickImage(source: ImageSource.gallery);
+                setState(() {});
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -70,7 +66,7 @@ class _ClothInputState extends State<ClothInput> {
             ),
             Container(
               child: Form(
-                key: this.ClothKey,
+                key: ClothKey,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -80,7 +76,7 @@ class _ClothInputState extends State<ClothInput> {
                           label: '옷 이름',
                           onSaved: (val) {
                             setState(() {
-                              this.name = val;
+                              name = val;
                             });
                           },
                           validator: (val) {
@@ -162,7 +158,7 @@ class _ClothInputState extends State<ClothInput> {
           RepositoryProvider.of<FirestoreRepository>(context).addCloth(
               uid: RepositoryProvider.of<AuthenticationRepository>(context)
                   .currentUser,
-              image: _imageFile,
+              image: File(_imageFile!.path),
               cloth: Cloth(
                 clothId: '',
                 name: name,

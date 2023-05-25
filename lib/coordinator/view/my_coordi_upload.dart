@@ -60,7 +60,7 @@ class _MyCoordiUploadState extends State<MyCoordiUpload> {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
-                              decoration: InputDecoration(labelText: '제목'),
+                              decoration: const InputDecoration(labelText: '제목'),
                               onSaved: (val) {
                                 setState(() {
                                   this.title = val!;
@@ -73,11 +73,11 @@ class _MyCoordiUploadState extends State<MyCoordiUpload> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             TextFormField(
                               maxLines: 2,
                               minLines: 2,
-                              decoration: InputDecoration(labelText: '코디 설명'),
+                              decoration: const InputDecoration(labelText: '코디 설명'),
                               onSaved: (val) {
                                 setState(() {
                                   this.description = val!;

@@ -28,18 +28,25 @@ class _MainpageState extends State<Mainpage>
   @override
   void initState() {
     super.initState();
-    // FirebaseRepository의 initDocument 메서드 호출
-    RepositoryProvider.of<FirestoreRepository>(context).initDocument(
-      document:
-          RepositoryProvider.of<AuthenticationRepository>(context).currentUser,
-      name: RepositoryProvider.of<AuthenticationRepository>(context)
-          .currentUserName,
-      email: RepositoryProvider.of<AuthenticationRepository>(context)
-          .currentUserEmail,
-    );
+    initUserDocument(); // FirebaseRepository의 initDocument 메서드 호출
 
     controller = TabController(length: 5, vsync: this);
     controller.addListener(tabListener);
+  }
+
+  Future<void> initUserDocument() async {
+    final authRepo = RepositoryProvider.of<AuthenticationRepository>(context);
+    final firestoreRepo = RepositoryProvider.of<FirestoreRepository>(context);
+
+    String uid = authRepo.currentUser;
+    String defaultName = await authRepo.currentUserName;
+    String email = authRepo.currentUserEmail;
+
+    await firestoreRepo.initDocument(
+      document: uid,
+      defaultName: defaultName,
+      email: email,
+    );
   }
 
   @override
@@ -58,14 +65,14 @@ class _MainpageState extends State<Mainpage>
 
   @override
   Widget build(BuildContext context) {
-    return DefaultLayout(
-      title: '나의 옷장',
+    return Scaffold(
+      //title: '나의 옷장',
       bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: index,
           onTap: (int index) {
             controller.animateTo(index);
           }),
-      child: TabBarView(
+      body: TabBarView(
         physics: const NeverScrollableScrollPhysics(), //스크롤 막기
         controller: controller,
         children: [
