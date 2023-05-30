@@ -14,7 +14,7 @@ class CoordiRepository {
   })  : _firebaseStorage = firebaseStorage,
         _firebaseFirestore = firebaseFirestore;
 
-  /// upload My Coordi
+  /// upload My Coordi to Firebase and Storage
   Future<void> uploadCoordi({
     required String uid,
     required String title,
@@ -25,10 +25,10 @@ class CoordiRepository {
       String fileName = image.path.split('/').last;
 
       // 파일 위치에 대한 참조 생성
-      Reference ref =
+      Reference storageRef =
       _firebaseStorage.ref().child('coordi').child(uid).child(fileName);
 
-      UploadTask uploadTask = ref.putFile(image); // 업로드 시작
+      UploadTask uploadTask = storageRef.putFile(image); // 업로드 시작
 
       final TaskSnapshot downloadUrl = (await uploadTask);
       final String url = await downloadUrl.ref.getDownloadURL();
@@ -50,21 +50,6 @@ class CoordiRepository {
     }
   }
 
-  /// Get a single Coordi by id
-  Future<MyOutfit> getCoordiById(String coordiId) async {
-    try {
-      DocumentSnapshot coordiSnapshot = await _firebaseFirestore
-          .collection('MyOutfits')
-          .doc(coordiId)
-          .get();
-      return MyOutfit.fromJson(coordiSnapshot.data() as Map<String, dynamic>);
-    }
-    catch (e) {
-      print(e);
-      throw 'Error occurred while fetching Coordi by id from Firebase';
-    }
-  }
-
   /// Get all Coordi for a specific user
   Future<List<MyOutfit>> getMyCoordiList(String userId) async {
     try {
@@ -80,28 +65,13 @@ class CoordiRepository {
     }
   }
 
-  /// Get Coordi Image Url by Coordi Id from _firebaseFirestore
-  Future<String> getCoordiImageById(String coordiId) async {
-    try {
-      DocumentSnapshot coordiSnapshot = await _firebaseFirestore
-          .collection('MyOutfits')
-          .doc(coordiId)
-          .get();
-      return (coordiSnapshot.data() as Map<String, dynamic>)['photoUrl'] ?? '';
-    } catch (e) {
-      print(e);
-      throw 'Error occurred while fetching Coordi Image by id from Firebase';
-    }
-  }
-
-  // Remove Coordi
+  /// Remove Coordi
   Future<void> removeCoordi(String coordiId, String ownerId, String imageUrl) async {
     try {
       await _firebaseFirestore.collection('MyOutfits').doc(coordiId).delete();
       // Get reference of the image file
       Reference ref = _firebaseStorage.refFromURL(imageUrl);
       await ref.delete();
-
     } catch (e) {
       print(e);
       throw 'Error occurred while deleting Coordi';

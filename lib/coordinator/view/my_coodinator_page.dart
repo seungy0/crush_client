@@ -38,11 +38,24 @@ class _MyCoordiPageState extends State<MyCoordiPage> {
                 future: _myOutfitList,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SliverFillRemaining(
-                        child: CircularProgressIndicator());
+                    return SliverToBoxAdapter(
+                      child: Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator()
+                      ),
+                    );
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const SliverFillRemaining(child: Text('아직 등록된 코디가 없습니다.'));
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          '아직 등록된 코디가 없습니다.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    );
                   }
 
                   List<MyOutfit> outfits = snapshot.data!;
