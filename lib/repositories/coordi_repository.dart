@@ -33,12 +33,12 @@ class CoordiRepository {
       final TaskSnapshot downloadUrl = (await uploadTask);
       final String url = await downloadUrl.ref.getDownloadURL();
 
-      DocumentReference docRef = _firebaseFirestore.collection('MyOutfits').add({
+      DocumentReference<Map<String, dynamic>> docRef = await _firebaseFirestore.collection('MyOutfits').add({
         'title': title,
         'ownerId': uid,
         'photoUrl': url,
         'description': description,
-      }) as DocumentReference<Object?>;
+      });
 
       await _firebaseFirestore.collection('MyOutfits').doc(docRef.id).update({
         'coordiId': docRef.id,

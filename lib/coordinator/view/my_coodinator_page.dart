@@ -189,7 +189,7 @@ class _MyCoordiPageState extends State<MyCoordiPage> {
                   ),
                   const SizedBox(height: 16.0),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -203,7 +203,6 @@ class _MyCoordiPageState extends State<MyCoordiPage> {
                               setState(() {
                                 _myOutfitList = _coordiRepository.getMyCoordiList(outfit.ownerId);
                               });
-
                             } catch (e) {
                               print(e);
                             }
@@ -217,6 +216,7 @@ class _MyCoordiPageState extends State<MyCoordiPage> {
                                 TextStyle(fontSize: 18.0, color: Colors.black),
                           ),
                         ),
+                        const SizedBox(width: 30.0),
                       ],
                     ),
                   ),
