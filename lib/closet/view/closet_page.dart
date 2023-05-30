@@ -312,7 +312,6 @@ class _ClosetPageState extends State<ClosetPage>
           stream: firestoreRepository.getClothStream(
             uid: RepositoryProvider.of<AuthenticationRepository>(context)
                 .currentUser,
-            type: type,
           ),
           builder: (context, clothList) {
             if (clothList.hasError)
@@ -390,61 +389,72 @@ class _ClosetPageState extends State<ClosetPage>
         '패딩',
         '바람막이',
       ];
-      final topClothes = firestoreRepository.allClothes
-          .where((cloth) => topClothTypes.contains(cloth.type))
-          .toList();
-      const defaultImage =
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
       return Expanded(
-        child: GridView.builder(
-          itemCount: topClothes.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+        child: StreamBuilder<List<Cloth>>(
+          stream: firestoreRepository.getClothStream(
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                .currentUser,
           ),
-          itemBuilder: (BuildContext context, int index) {
-            final Cloth cloth = topClothes[index];
-
-            return FutureBuilder<String?>(
-              future: RepositoryProvider.of<FirestoreRepository>(context)
-                  .getImageByClothId(
-                uid: RepositoryProvider.of<AuthenticationRepository>(context)
-                    .currentUser,
-                clothId: cloth.clothId,
+          builder: (context, clothList) {
+            if (clothList.hasError)
+              return Center(child: Text('Error: ${clothList.error}'));
+            if (clothList.connectionState == ConnectionState.waiting)
+              return const Center(child: CircularProgressIndicator());
+            final filteredClothes = clothList.data!
+                .where((cloth) => topClothTypes.contains(cloth.type))
+                .toList();
+            return GridView.builder(
+              itemCount: filteredClothes.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
               ),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final imageUrl = snapshot.data ?? '';
-
-                  return GestureDetector(
-                    onTap: () {
-                      _showClothDialog(context, cloth);
-                    },
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Image.network(
-                            imageUrl.isEmpty ? defaultImage : imageUrl,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+              itemBuilder: (BuildContext context, int index) {
+                final Cloth cloth = filteredClothes[index];
+                const defaultImage =
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
+                return FutureBuilder<String?>(
+                  future: RepositoryProvider.of<FirestoreRepository>(context)
+                      .getImageByClothId(
+                    uid:
+                    RepositoryProvider.of<AuthenticationRepository>(context)
+                        .currentUser,
+                    clothId: cloth.clothId,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      final imageUrl = snapshot.data ?? '';
+                      return GestureDetector(
+                        onTap: () {
+                          _showClothDialog(context, cloth);
+                        },
+                        child: Container(
+                          child: Column(
                             children: [
-                              Text(cloth.name),
-                              Text(' '),
-                              Text(cloth.type),
+                              Image.network(
+                                imageUrl.isEmpty ? defaultImage : imageUrl,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(cloth.name),
+                                  Text(' '),
+                                  Text(cloth.type),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
+                        ),
+                      );
+                    }
+                  },
+                );
               },
             );
           },
@@ -456,61 +466,72 @@ class _ClosetPageState extends State<ClosetPage>
         '슬랙스',
         '조거팬츠',
       ];
-      final bottomClothes = firestoreRepository.allClothes
-          .where((cloth) => bottomClothTypes.contains(cloth.type))
-          .toList();
-      const defaultImage =
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
       return Expanded(
-        child: GridView.builder(
-          itemCount: bottomClothes.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+        child: StreamBuilder<List<Cloth>>(
+          stream: firestoreRepository.getClothStream(
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                .currentUser,
           ),
-          itemBuilder: (BuildContext context, int index) {
-            final Cloth cloth = bottomClothes[index];
-
-            return FutureBuilder<String?>(
-              future: RepositoryProvider.of<FirestoreRepository>(context)
-                  .getImageByClothId(
-                uid: RepositoryProvider.of<AuthenticationRepository>(context)
-                    .currentUser,
-                clothId: cloth.clothId,
+          builder: (context, clothList) {
+            if (clothList.hasError)
+              return Center(child: Text('Error: ${clothList.error}'));
+            if (clothList.connectionState == ConnectionState.waiting)
+              return const Center(child: CircularProgressIndicator());
+            final filteredClothes = clothList.data!
+                .where((cloth) => bottomClothTypes.contains(cloth.type))
+                .toList();
+            return GridView.builder(
+              itemCount: filteredClothes.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
               ),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final imageUrl = snapshot.data ?? '';
-
-                  return GestureDetector(
-                    onTap: () {
-                      _showClothDialog(context, cloth);
-                    },
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Image.network(
-                            imageUrl.isEmpty ? defaultImage : imageUrl,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+              itemBuilder: (BuildContext context, int index) {
+                final Cloth cloth = filteredClothes[index];
+                const defaultImage =
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
+                return FutureBuilder<String?>(
+                  future: RepositoryProvider.of<FirestoreRepository>(context)
+                      .getImageByClothId(
+                    uid:
+                    RepositoryProvider.of<AuthenticationRepository>(context)
+                        .currentUser,
+                    clothId: cloth.clothId,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      final imageUrl = snapshot.data ?? '';
+                      return GestureDetector(
+                        onTap: () {
+                          _showClothDialog(context, cloth);
+                        },
+                        child: Container(
+                          child: Column(
                             children: [
-                              Text(cloth.name),
-                              Text(' '),
-                              Text(cloth.type),
+                              Image.network(
+                                imageUrl.isEmpty ? defaultImage : imageUrl,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(cloth.name),
+                                  Text(' '),
+                                  Text(cloth.type),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
+                        ),
+                      );
+                    }
+                  },
+                );
               },
             );
           },
@@ -521,61 +542,72 @@ class _ClosetPageState extends State<ClosetPage>
         '신발',
         '안경',
       ];
-      final anyClothes = firestoreRepository.allClothes
-          .where((cloth) => anyClothTypes.contains(cloth.type))
-          .toList();
-      const defaultImage =
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
       return Expanded(
-        child: GridView.builder(
-          itemCount: anyClothes.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+        child: StreamBuilder<List<Cloth>>(
+          stream: firestoreRepository.getClothStream(
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                .currentUser,
           ),
-          itemBuilder: (BuildContext context, int index) {
-            final Cloth cloth = anyClothes[index];
-
-            return FutureBuilder<String?>(
-              future: RepositoryProvider.of<FirestoreRepository>(context)
-                  .getImageByClothId(
-                uid: RepositoryProvider.of<AuthenticationRepository>(context)
-                    .currentUser,
-                clothId: cloth.clothId,
+          builder: (context, clothList) {
+            if (clothList.hasError)
+              return Center(child: Text('Error: ${clothList.error}'));
+            if (clothList.connectionState == ConnectionState.waiting)
+              return const Center(child: CircularProgressIndicator());
+            final filteredClothes = clothList.data!
+                .where((cloth) => anyClothTypes.contains(cloth.type))
+                .toList();
+            return GridView.builder(
+              itemCount: filteredClothes.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
               ),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final imageUrl = snapshot.data ?? '';
-
-                  return GestureDetector(
-                    onTap: () {
-                      _showClothDialog(context, cloth);
-                    },
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Image.network(
-                            imageUrl.isEmpty ? defaultImage : imageUrl,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+              itemBuilder: (BuildContext context, int index) {
+                final Cloth cloth = filteredClothes[index];
+                const defaultImage =
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
+                return FutureBuilder<String?>(
+                  future: RepositoryProvider.of<FirestoreRepository>(context)
+                      .getImageByClothId(
+                    uid:
+                    RepositoryProvider.of<AuthenticationRepository>(context)
+                        .currentUser,
+                    clothId: cloth.clothId,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      final imageUrl = snapshot.data ?? '';
+                      return GestureDetector(
+                        onTap: () {
+                          _showClothDialog(context, cloth);
+                        },
+                        child: Container(
+                          child: Column(
                             children: [
-                              Text(cloth.name),
-                              Text(' '),
-                              Text(cloth.type),
+                              Image.network(
+                                imageUrl.isEmpty ? defaultImage : imageUrl,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(cloth.name),
+                                  Text(' '),
+                                  Text(cloth.type),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
+                        ),
+                      );
+                    }
+                  },
+                );
               },
             );
           },

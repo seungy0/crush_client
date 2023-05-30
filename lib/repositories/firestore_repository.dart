@@ -14,7 +14,6 @@ class FirestoreRepository {
 
   final FirebaseFirestore _firebaseFirestore;
   final firebase_storage.FirebaseStorage _firebaseStorage;
-  List<Cloth> _allClothes = [];
 
   /// init Document
   Future<void> initDocument({
@@ -86,29 +85,17 @@ class FirestoreRepository {
     return clothList.docs.map((cloth) => Cloth.fromJson(cloth.data())).toList();
   }
 
-  /// get Cloth Stream
   Stream<List<Cloth>> getClothStream({
-    required String uid,
-    required String type,
+    required String uid
   }) {
-    if (type == '전체') {
-      return _firebaseFirestore
-          .collection('Users')
-          .doc(uid)
-          .collection('clothes')
-          .snapshots()
-          .map((clothList) => clothList.docs
-              .map((cloth) => Cloth.fromJson(cloth.data()))
-              .toList())
-          .transform(StreamTransformer.fromHandlers(
-        handleData: (clothList, sink) {
-          _allClothes = clothList; // 전체 옷 데이터 저장
-          sink.add(clothList);
-        },
-      ));
-    } else {
-      return Stream.value(_allClothes);
-    }
+    return _firebaseFirestore
+        .collection('Users')
+        .doc(uid)
+        .collection('clothes')
+        .snapshots()
+        .map((clothList) => clothList.docs
+        .map((cloth) => Cloth.fromJson(cloth.data()))
+        .toList());
   }
 
   /// remove Cloth
@@ -142,6 +129,4 @@ class FirestoreRepository {
 
     return null;
   }
-
-  List<Cloth> get allClothes => _allClothes;
 }
