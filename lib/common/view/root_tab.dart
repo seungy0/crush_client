@@ -1,7 +1,6 @@
 import 'package:crush_client/closet/view/closet_page.dart';
 import 'package:crush_client/closet/view/cloth_upload_page.dart';
 import 'package:crush_client/common/const/colors.dart';
-import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/community/view/coordi_evaluation_page.dart';
 import 'package:crush_client/repositories/authentication_repository.dart';
 import 'package:crush_client/repositories/firestore_repository.dart';
@@ -22,7 +21,7 @@ class Mainpage extends StatefulWidget {
 
 class _MainpageState extends State<Mainpage>
     with SingleTickerProviderStateMixin {
-  late TabController controller; //late: 나중에 무조건 초기화되서
+  late TabController controller;
   int index = 0;
 
   @override
@@ -66,7 +65,6 @@ class _MainpageState extends State<Mainpage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //title: '나의 옷장',
       bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: index,
           onTap: (int index) {
@@ -161,6 +159,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       children: [
         SimpleDialogOption(
           onPressed: () {
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ClothInput()),
@@ -170,6 +169,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ),
         SimpleDialogOption(
           onPressed: () {
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => MyCoordiUpload()),
