@@ -1,7 +1,7 @@
 import 'package:crush_client/closet/services/api_service.dart';
 import 'package:flutter/material.dart';
 
-import '../model/coordination_model.dart';
+import '../../model/coordination_model.dart';
 
 class RecommendPage extends StatelessWidget {
   RecommendPage({Key? key}) : super(key: key);

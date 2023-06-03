@@ -1,5 +1,5 @@
 import 'package:crush_client/closet/view/closet_page.dart';
-import 'package:crush_client/closet/view/cloth_upload_page.dart';
+import 'package:crush_client/closet/view/cloth_upload/cloth_upload_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/community/view/coordi_evaluation_page.dart';
 import 'package:crush_client/repositories/authentication_repository.dart';

@@ -1,5 +1,5 @@
 import 'package:crush_client/closet/model/cloth_model.dart';
-import 'package:crush_client/closet/view/recommend_page.dart';
+import 'package:crush_client/closet/view/cloth_recommend/cloth_recommend_page.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/repositories/repositories.dart';
@@ -118,7 +118,7 @@ class _ClosetPageState extends State<ClosetPage>
                     padding: EdgeInsets.symmetric(horizontal: 2.5, vertical: 8),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         Icon(CupertinoIcons.paperplane_fill,
                             color: INPUT_BG_COLOR),
                         SizedBox(width: 10),
