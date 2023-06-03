@@ -5,10 +5,12 @@ class CoordiEvalCard extends StatefulWidget {
   CoordiEvalCard({
     Key? key,
     required this.photoUri,
+    required this.title,
     required this.onRated,
   }) : super(key: key);
 
   final String photoUri;
+  final String title;
   final Function(double) onRated;
 
   @override
@@ -50,6 +52,30 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                 widget.photoUri,
                 fit: BoxFit.cover,
               ),
+              Align(
+                alignment: const Alignment(-0.8, 0.72),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Text.rich(
+                    TextSpan(
+                      text: widget.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 48,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(3, 3),
+                            color: Colors.black,
+                            blurRadius: 50,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -68,7 +94,7 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                   ),
                   Container(
                     height: screenHeight * 0.05,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.black,
                     ),
                   )
@@ -93,11 +119,11 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                             allowHalfRating: false,
                             itemCount: 5,
                             ratingWidget: RatingWidget(
-                              full: Icon(
+                              full: const Icon(
                                 Icons.star,
                                 color: Colors.amber,
                               ),
-                              half: Icon(
+                              half: const Icon(
                                 Icons.star_half,
                                 color: Colors.amber,
                               ),
@@ -106,7 +132,7 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                                 color: Colors.grey.shade700,
                               ),
                             ),
-                            itemPadding: EdgeInsets.symmetric(
+                            itemPadding: const EdgeInsets.symmetric(
                               horizontal: 0.0,
                             ),
                             itemSize: screenHeight * 0.065,
