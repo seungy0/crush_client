@@ -34,7 +34,7 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
         child: AnimatedContainer(
           width: _shouldAnimate ? screenWidth * 0.01 : screenWidth * 0.9,
           height: _shouldAnimate ? screenHeight * 0.01 : screenHeight * 0.7,
-          duration: const Duration(milliseconds: 1200),
+          duration: const Duration(milliseconds: 1000),
           onEnd: () {
             if(_completedAnimation){
               widget.onRated(0);

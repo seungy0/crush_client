@@ -30,65 +30,77 @@ class _CoordiEvalPageState extends State<CoordiEvalPage> {
         _coordiRepository.getOtherCoordiList(userId: userId, count: 5);
   }
 
+  // image prefetching
+  List<Future<void>> prefetchImages(List<MyOutfit> outfits) {
+    List<Future<void>> futures = [];
+    for (MyOutfit outfit in outfits) {
+      futures.add(precacheImage(NetworkImage(outfit.photoUrl), context));
+    }
+    return futures;
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '코디 평가',
       child: _finished
           ? Container(
+        height: MediaQuery.of(context).size.height * 0.5,
+        alignment: Alignment.center,
+        child: const Text(
+          '\n\n평가가 완료되었습니다.\n\n😁🥰',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        ),
+      )
+          : FutureBuilder<List<MyOutfit>>(
+        future: _outfitList,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator());
+          }
+          List<MyOutfit>? outfits = snapshot.data;
+          if (outfits == null || outfits.isEmpty) {
+            return Container(
               height: MediaQuery.of(context).size.height * 0.5,
               alignment: Alignment.center,
-              child: const Text(
-                '\n\n평가가 완료되었습니다.\n\n😁🥰',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
-              ),
-            )
-          : FutureBuilder<List<MyOutfit>>(
-              future: _outfitList,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      alignment: Alignment.center,
-                      child: const CircularProgressIndicator());
-                }
-                List<MyOutfit>? outfits = snapshot.data;
-                if (outfits == null || outfits.isEmpty) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    alignment: Alignment.center,
-                    child: const Text('평가할 코디가 없습니다.'),
-                  );
-                } else {
-                  return Stack(
-                    children: outfits.asMap().entries.map((e) {
-                      int index = e.key;
-                      MyOutfit outfit = e.value;
-                      return Visibility(
-                        visible: index == _curIndex,
-                        child: CoordiEvalCard(
-                          photoUri: outfit.photoUrl,
-                          title: outfit.title,
-                          onRated: (double rating) async {
-                            await _coordiRepository.rateOutfit(
-                                coordid: outfit.coordiId,
-                                raterUserId: userId,
-                                stars: rating);
-                            setState(() {
-                              _curIndex += 1;
-                              if (_curIndex >= outfits.length) {
-                                _finished = true;
-                              }
-                            });
-                          },
-                        ),
-                      );
-                    }).toList(),
-                  );
-                }
-              },
-            ),
+              child: const Text('평가할 코디가 없습니다.'),
+            );
+          } else {
+            //Prefetch images
+            Future.wait(prefetchImages(outfits));
+
+            return Stack(
+              children: outfits.asMap().entries.map((e) {
+                int index = e.key;
+                MyOutfit outfit = e.value;
+                return Visibility(
+                  visible: index == _curIndex,
+                  child: CoordiEvalCard(
+                    photoUri: outfit.photoUrl,
+                    title: outfit.title,
+                    onRated: (double rating) async {
+                      await _coordiRepository.rateOutfit(
+                          coordid: outfit.coordiId,
+                          raterUserId: userId,
+                          stars: rating);
+                      setState(() {
+                        _curIndex += 1;
+                        if (_curIndex >= outfits.length) {
+                          _finished = true;
+                        }
+                      });
+                    },
+                  ),
+                );
+              }).toList(),
+            );
+          }
+        },
+      ),
     );
   }
 }
