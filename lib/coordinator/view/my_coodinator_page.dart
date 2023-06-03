@@ -182,7 +182,7 @@ class _MyCoordiPageState extends State<MyCoordiPage> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        '별점 : ${outfit.ratings.isNotEmpty ? outfit.ratings.map((e) => e.stars).reduce((a, b) => a + b) / outfit.ratings.length : '평가없음'} / 5',
+                                        '별점 : ${outfit.ratings.isNotEmpty ? '${(outfit.ratings.map((e) => e.stars).reduce((a, b) => a + b) / outfit.ratings.length).toStringAsFixed(1)}점': '평가없음'} / 5',
                                         style: const TextStyle(
                                           fontSize: 20.0,
                                           color: Colors.white,

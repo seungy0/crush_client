@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -57,11 +58,71 @@ class CoordiRepository {
           .collection('MyOutfits')
           .where('ownerId', isEqualTo: userId)
           .get();
-      return coordiSnapshots.docs.map((coordi) =>
-          MyOutfit.fromJson(coordi.data() as Map<String, dynamic>)).toList();
+
+      List<MyOutfit> outfits = [];
+
+      for(DocumentSnapshot coordi in coordiSnapshots.docs) {
+        Map<String, dynamic> coordiData = coordi.data() as Map<String, dynamic>;
+
+        QuerySnapshot ratingSnapshots = await coordi.reference
+            .collection('ratings')
+            .get();
+
+        List<Map<String, dynamic>> ratings = ratingSnapshots.docs.map(
+                (rating) =>
+                rating.data() as Map<String, dynamic>).toList();
+
+        outfits.add(MyOutfit.fromJson({
+          ...coordiData,
+          'ratings': ratings,
+        }));
+      }
+      return outfits.toList();
     } catch (e) {
       print(e);
       throw 'Error occurred while fetching My Coordi List from Firebase';
+    }
+  }
+
+  /// Get all outfits except owned by current user
+  Future<List<MyOutfit>> getOtherCoordiList({required String userId, int count = 5}) async {
+    try {
+      QuerySnapshot coordiSnapshots = await _firebaseFirestore
+          .collection('MyOutfits')
+          .where('ownerId', isNotEqualTo: userId)
+          .get();
+
+      if(coordiSnapshots.docs.isEmpty) {
+        return [];
+      }
+
+      final realCount = min(count, coordiSnapshots.docs.length);
+      final List<MyOutfit> allCoordiList = coordiSnapshots.docs
+          .map((coordi) => MyOutfit.fromJson(coordi.data() as Map<String, dynamic>))
+          .toList();
+      // Shuffle the list
+      allCoordiList.shuffle();
+      return allCoordiList.take(realCount).toList();
+
+    } catch (e) {
+      print(e);
+      throw 'Error occurred while fetching other Coordi List from Firebase';
+    }
+  }
+
+  Future<void> rateOutfit({required String coordid, required String raterUserId, required double stars}) async {
+    try{
+      await _firebaseFirestore
+          .collection('MyOutfits')
+          .doc(coordid)
+          .collection('ratings')
+          .add({
+        'raterUserId': raterUserId,
+        'stars': stars,
+      });
+    } catch (e) {
+      print(e);
+      throw 'Error occurred while rating Coordi';
     }
   }
 
