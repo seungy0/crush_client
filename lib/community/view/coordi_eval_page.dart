@@ -49,22 +49,26 @@ class _CoordiEvalPageState extends State<CoordiEvalPage> {
               child: const Text('평가할 코디가 없습니다.'),
             );
           } else {
-            return ListView.builder(
-              itemCount: outfits.length,
-              itemBuilder: (context, index) {
-                return CoordiEvalCard(
-                  photoUri: outfits[index].photoUrl,
-                  onRated: (double rating) async {
-                    await _coordiRepository.rateOutfit(
-                        coordid: outfits[index].coordiId,
-                        raterUserId: userId,
-                        stars: rating);
-                    setState(() {
-                      _curIndex = (_curIndex + 1) % outfits.length;
-                    });
-                  },
+            return Stack(
+              children: outfits.asMap().entries.map((e) {
+                int index = e.key;
+                MyOutfit outfit = e.value;
+                return Visibility(
+                  visible: index == _curIndex,
+                  child: CoordiEvalCard(
+                    photoUri: outfit.photoUrl,
+                    onRated: (double rating) async {
+                      await _coordiRepository.rateOutfit(
+                          coordid: outfit.coordiId,
+                          raterUserId: userId,
+                          stars: rating);
+                      setState(() {
+                        _curIndex = (_curIndex + 1) % outfits.length;
+                      });
+                    },
+                  ),
                 );
-              },
+              }).toList(),
             );
           }
         },

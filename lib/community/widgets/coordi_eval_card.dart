@@ -16,6 +16,8 @@ class CoordiEvalCard extends StatefulWidget {
 }
 
 class _CoordiEvalCardState extends State<CoordiEvalCard> {
+  bool _completedAnimation = false;
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -24,8 +26,16 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
       onTap: () {
         widget.onRated(0);
       },
-      child: SizedBox(
-        height: screenHeight * 0.7,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 800),
+        onEnd: () {
+          if(_completedAnimation){
+            widget.onRated(0);
+            _completedAnimation = false;
+          }
+        },
+        curve: Curves.easeOutCubic,
+        height: screenHeight * (_completedAnimation ? 0.8 : 0.7),
         child: Container(
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
@@ -100,7 +110,9 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                             itemSize: screenHeight * 0.065,
                             glow: false,
                             onRatingUpdate: (rating) {
-                              widget.onRated(rating);
+                              setState(() {
+                                _completedAnimation = true;
+                              });
                             },
                           ),
                         ],
