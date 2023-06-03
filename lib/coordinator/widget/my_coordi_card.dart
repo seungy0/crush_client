@@ -1,7 +1,13 @@
+import 'package:crush_client/coordinator/model/my_coordination_model.dart';
 import 'package:flutter/material.dart';
 
 class MyCoordiCard extends StatelessWidget {
-  const MyCoordiCard({Key? key}) : super(key: key);
+  final MyOutfit outfit;
+
+  const MyCoordiCard({
+    Key? key,
+    required this.outfit
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +18,7 @@ class MyCoordiCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Image.network(
-          'https://image.msscdn.net/mfile_s01/_street_images/53373/street_5d0c6ccb06221.jpg',
+          outfit.photoUrl,
           fit: BoxFit.cover,
         ),
       ),

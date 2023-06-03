@@ -1,10 +1,29 @@
 import 'package:crush_client/common/layout/default_layout.dart';
+import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../model/my_coordination_model.dart';
 import '../widget/my_coordi_card.dart';
 
-class MyCoordiPage extends StatelessWidget {
+class MyCoordiPage extends StatefulWidget {
   const MyCoordiPage({Key? key}) : super(key: key);
+
+  @override
+  State<MyCoordiPage> createState() => _MyCoordiPageState();
+}
+
+class _MyCoordiPageState extends State<MyCoordiPage> {
+  late final CoordiRepository _coordiRepository;
+  late Future<List<MyOutfit>> _myOutfitList;
+
+  @override
+  void initState() {
+    super.initState();
+    _coordiRepository = RepositoryProvider.of<CoordiRepository>(context);
+    String userId = RepositoryProvider.of<AuthenticationRepository>(context).currentUser;
+    _myOutfitList = _coordiRepository.getMyCoordiList(userId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,24 +34,54 @@ class MyCoordiPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: CustomScrollView(
             slivers: [
-              SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0,
-                  childAspectRatio: 3 / 4,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        _showCoordiDialog(context, index);
-                      },
-                      child: MyCoordiCard(),
+              FutureBuilder<List<MyOutfit>>(
+                future: _myOutfitList,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SliverToBoxAdapter(
+                      child: Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator()
+                      ),
                     );
-                  },
-                  childCount: 10,
-                ),
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          '아직 등록된 코디가 없습니다.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }
+
+                  List<MyOutfit> outfits = snapshot.data!;
+                  return SliverGrid(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                      childAspectRatio: 3 / 4,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            _showCoordiDialog(context, outfits[index]);
+                          },
+                          child: MyCoordiCard(
+                            outfit: outfits[index],
+                          ),
+                        );
+                      },
+                      childCount: outfits.length,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -41,7 +90,7 @@ class MyCoordiPage extends StatelessWidget {
     );
   }
 
-  void _showCoordiDialog(BuildContext context, int index) {
+  void _showCoordiDialog(BuildContext context, MyOutfit outfit) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -99,7 +148,7 @@ class MyCoordiPage extends StatelessWidget {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: Image.network(
-                                    'https://image.msscdn.net/mfile_s01/_street_images/53373/street_5d0c6ccb06221.jpg',
+                                    outfit.photoUrl,
                                     height: 600.0,
                                     width: double.infinity,
                                     fit: BoxFit.cover,
@@ -121,20 +170,20 @@ class MyCoordiPage extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: const [
+                                    children: [
                                       Text(
-                                        'MUSINSA\'S PICK',
-                                        style: TextStyle(
+                                        outfit.title,
+                                        style: const TextStyle(
                                           fontSize: 35.0,
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           decoration: TextDecoration.none,
                                         ),
                                       ),
-                                      SizedBox(height: 10.0),
+                                      const SizedBox(height: 10.0),
                                       Text(
-                                        '별점 : 4.5 / 5',
-                                        style: TextStyle(
+                                        '별점 : ${outfit.ratings.isNotEmpty ? '${(outfit.ratings.map((e) => e.stars).reduce((a, b) => a + b) / outfit.ratings.length).toStringAsFixed(1)}점': '평가없음'} / 5',
+                                        style: const TextStyle(
                                           fontSize: 20.0,
                                           color: Colors.white,
                                           decoration: TextDecoration.none,
@@ -153,13 +202,23 @@ class MyCoordiPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            // Do sth
+                          onPressed: () async {
+                            try{
+                              await _coordiRepository
+                                  .removeCoordi(outfit.coordiId, outfit.ownerId, outfit.photoUrl);
+                              Navigator.pop(context);
+
+                              setState(() {
+                                _myOutfitList = _coordiRepository.getMyCoordiList(outfit.ownerId);
+                              });
+                            } catch (e) {
+                              print(e);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.grey[400],
@@ -170,6 +229,7 @@ class MyCoordiPage extends StatelessWidget {
                                 TextStyle(fontSize: 18.0, color: Colors.black),
                           ),
                         ),
+                        const SizedBox(width: 30.0),
                       ],
                     ),
                   ),
