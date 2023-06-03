@@ -17,6 +17,7 @@ class CoordiEvalCard extends StatefulWidget {
 
 class _CoordiEvalCardState extends State<CoordiEvalCard> {
   bool _completedAnimation = false;
+  bool _shouldAnimate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,8 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
           }
         },
         curve: Curves.easeOutCubic,
-        height: screenHeight * (_completedAnimation ? 0.8 : 0.7),
+        transform: _shouldAnimate ? Matrix4.translationValues(screenWidth, -screenHeight*0.15,0)
+            : Matrix4.identity(),
         child: Container(
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
@@ -112,6 +114,7 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                             onRatingUpdate: (rating) {
                               setState(() {
                                 _completedAnimation = true;
+                                _shouldAnimate = true;
                               });
                             },
                           ),
