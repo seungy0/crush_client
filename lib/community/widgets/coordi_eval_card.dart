@@ -28,6 +28,9 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
 
     return GestureDetector(
       onTap: () {
+        showImageDialog(context, widget.photoUri);
+      },
+      onLongPress: () {
         widget.onRated(0);
       },
       child: Center(
@@ -144,6 +147,27 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
           ),
         ),
       ),
+    );
+  }
+
+  void showImageDialog(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: InkWell(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
