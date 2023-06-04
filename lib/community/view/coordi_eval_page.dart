@@ -115,11 +115,14 @@ class _CoordiEvalPageState extends State<CoordiEvalPage> {
                           child: CoordiEvalCard(
                             photoUri: outfit.photoUrl,
                             title: outfit.title,
-                            onRated: (double rating) async {
-                              await _coordiRepository.rateOutfit(
-                                  coordid: outfit.coordiId,
-                                  raterUserId: userId,
-                                  stars: rating);
+                            onRated: (double rating, bool isUserRated) async {
+                              if (isUserRated) {
+                                await _coordiRepository.rateOutfit(
+                                    coordid: outfit.coordiId,
+                                    raterUserId: userId,
+                                    stars: rating
+                                );
+                              }
                               setState(() {
                                 _curIndex += 1;
                                 if (_curIndex >= outfits.length) {

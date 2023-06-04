@@ -11,7 +11,7 @@ class CoordiEvalCard extends StatefulWidget {
 
   final String photoUri;
   final String title;
-  final Function(double) onRated;
+  final Function(double,bool) onRated;
 
   @override
   State<CoordiEvalCard> createState() => _CoordiEvalCardState();
@@ -31,7 +31,7 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
         showImageDialog(context, widget.photoUri);
       },
       onLongPress: () {
-        widget.onRated(0);
+        widget.onRated(5,false);
       },
       child: Center(
         child: AnimatedContainer(
@@ -40,7 +40,7 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
           duration: const Duration(milliseconds: 1000),
           onEnd: () {
             if(_completedAnimation){
-              widget.onRated(0);
+              widget.onRated(5,false);
               _completedAnimation = false;
             }
           },
@@ -134,6 +134,7 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                                   _completedAnimation = true;
                                   _shouldAnimate = true;
                                 });
+                                widget.onRated(rating,true);
                               },
                             ),
                           ],
