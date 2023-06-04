@@ -18,7 +18,6 @@ class CoordiEvalCard extends StatefulWidget {
 }
 
 class _CoordiEvalCardState extends State<CoordiEvalCard> {
-  bool _completedAnimation = false;
   bool _shouldAnimate = false;
 
   @override
@@ -31,21 +30,15 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
         showImageDialog(context, widget.photoUri);
       },
       onLongPress: () {
-        widget.onRated(5,false);
+        widget.onRated(0,false);
       },
       child: Center(
         child: AnimatedContainer(
-          width: _shouldAnimate ? screenWidth * 0.01 : screenWidth * 0.9,
-          height: _shouldAnimate ? screenHeight * 0.01 : screenHeight * 0.7,
+          width: screenWidth * 0.9,
+          height: screenHeight * 0.7,
           duration: const Duration(milliseconds: 1000),
-          onEnd: () {
-            if(_completedAnimation){
-              widget.onRated(5,false);
-              _completedAnimation = false;
-            }
-          },
           curve: Curves.easeOutCubic,
-          transform: _shouldAnimate ? Matrix4.translationValues(screenWidth, -screenHeight*0.7,0)
+          transform: _shouldAnimate ? Matrix4.translationValues(screenWidth, -screenHeight * 0.7, 0)
               : Matrix4.identity(),
           child: Container(
             clipBehavior: Clip.hardEdge,
@@ -59,7 +52,6 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                   widget.photoUri,
                   fit: BoxFit.cover,
                 ),
-
                 Positioned.fill(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
@@ -131,10 +123,11 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                               glow: false,
                               onRatingUpdate: (rating) {
                                 setState(() {
-                                  _completedAnimation = true;
                                   _shouldAnimate = true;
                                 });
-                                widget.onRated(rating,true);
+                                Future.delayed(const Duration(milliseconds: 1000),(){
+                                  widget.onRated(rating,true);
+                                });
                               },
                             ),
                           ],
