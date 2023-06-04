@@ -56,6 +56,16 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                   widget.photoUri,
                   fit: BoxFit.cover,
                 ),
+
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.asset(
+                      'assets/black_shadow_overlay.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: const Alignment(-0.8, 0.72),
                   child: Container(
@@ -78,31 +88,6 @@ class _CoordiEvalCardState extends State<CoordiEvalCard> {
                       ),
                     ),
                   ),
-                ),
-
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      height: screenHeight * 0.05,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: <Color>[
-                            Colors.black.withOpacity(0),
-                            Colors.black.withOpacity(1),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: screenHeight * 0.05,
-                      decoration: const BoxDecoration(
-                        color: Colors.black,
-                      ),
-                    )
-                  ],
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
