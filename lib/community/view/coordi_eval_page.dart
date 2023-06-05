@@ -43,6 +43,9 @@ class _CoordiEvalPageState extends State<CoordiEvalPage> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '코디 평가',
+      helpContent: '다른 사람의 코디에 별점을 보낼 수 있습니다.\n\n'
+          '사진을 누르면, 확대된 이미지를 볼 수 있습니다.\n'
+          '길게 누르면, 평가를 건너 뛸 수 있습니다.',
       child: _finished
           ? Container(
               height: MediaQuery.of(context).size.height * 0.5,
