@@ -46,7 +46,7 @@ class DefaultLayout extends StatelessWidget {
         if(helpContent != null)
           IconButton(
             icon: const Icon(Icons.help_outline),
-            padding: const EdgeInsets.only(right: 24.0),
+            padding: const EdgeInsets.only(right: 30.0),
             onPressed: () => showHelpDialog(context),
           ),
       ],
@@ -58,11 +58,11 @@ class DefaultLayout extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('도움말'),
+          title: const Text('도움말'),
           content: Text(helpContent!),
           actions: [
             TextButton(
-              child: Text('닫기'),
+              child: const Text('닫기'),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
