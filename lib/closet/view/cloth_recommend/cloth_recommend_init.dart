@@ -1,6 +1,11 @@
+import 'package:crush_client/closet/services/api_service.dart';
 import 'package:crush_client/closet/widget/custom_dropdown.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
+import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'cloth_recommend_result.dart';
 
 class ClothRecommendInit extends StatefulWidget {
   const ClothRecommendInit({Key? key}) : super(key: key);
@@ -10,10 +15,22 @@ class ClothRecommendInit extends StatefulWidget {
 }
 
 class _ClothRecommendInitState extends State<ClothRecommendInit> {
+  late final FirestoreRepository _firestoreRepository;
+  String userId = '';
+
   String weatherValue = '맑음';
   String occasionValue = '캐주얼';
   String styleValue = '활기찬';
   String seasonValue = '봄';
+
+  @override
+  void initState() {
+    super.initState();
+    _firestoreRepository = RepositoryProvider.of<FirestoreRepository>(context);
+    userId = RepositoryProvider
+        .of<AuthenticationRepository>(context)
+        .currentUser;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +68,15 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                 ),
                 CustomDropdown(
                   value: styleValue,
-                  items: const ['활기찬', '생동감', '어두운', '명랑한', '우아한', '세련된', '편안한'],
+                  items: const [
+                    '활기찬',
+                    '생동감',
+                    '어두운',
+                    '명랑한',
+                    '우아한',
+                    '세련된',
+                    '편안한'
+                  ],
                   onChanged: (String? newValue) {
                     setState(() {
                       styleValue = newValue!;
@@ -86,8 +111,26 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
               ],
             ),
             ElevatedButton(
-              onPressed: () {
-                //?
+              onPressed: () async {
+                final cloths = await _firestoreRepository.getClothList(
+                    uid: userId);
+                final recommendations = await ApiService.getAiCoordination(
+                  cloths: cloths,
+                  weather: weatherValue,
+                  occasion: occasionValue,
+                  season: seasonValue,
+                  style: styleValue,
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ClothRecommendResult(
+                          recommendations: recommendations,
+                        ),
+                  ),
+                );
               },
               child: Text("옷 추천 받기"),
             ),

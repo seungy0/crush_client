@@ -1,79 +1,80 @@
 import 'package:crush_client/closet/services/api_service.dart';
+import 'package:crush_client/common/const/colors.dart';
+import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/recommend_model.dart';
 
 class ClothRecommendResult extends StatelessWidget {
-  ClothRecommendResult({Key? key}) : super(key: key);
+  final List<RecommendModel> recommendations;
 
-  Future<List<RecommendModel>> coordis = ApiService.getAiCoordination();
+  const ClothRecommendResult({Key? key, required this.recommendations})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: coordis,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.length,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemBuilder: (context, index) {
-                      var coordi = snapshot.data![index];
-                      String clothes = coordi.clothes.join(", ");
-                      return Column(
+    return DefaultLayout(
+      title: "옷 추천 결과",
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: recommendations.length,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              itemBuilder: (context, index) {
+                var item = recommendations[index];
+                String clothes = item.clothes.join(", ");
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: PRIMARY_COLOR.withOpacity(0.25),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.black.withOpacity(0.4),
+                          const Text(
+                            "👕결과👖",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 25,
                             ),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
-                            width: 350,
-                            height: 500,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  clothes,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 30),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  coordi.explanation,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            clothes,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 30,
                             ),
-                          )
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            item.explanation,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
                         ],
-                      );
-                    },
-                    separatorBuilder: (context, index) => SizedBox(
-                      width: 40,
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+                  ],
+                );
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: 40),
+            ),
+          ),
+        ],
       ),
     );
   }
