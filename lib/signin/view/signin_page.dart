@@ -29,6 +29,7 @@ class _SignInWithVideoState extends State<SignInWithVideo> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xffb55e28),
         colorScheme: ColorScheme.fromSwatch()
