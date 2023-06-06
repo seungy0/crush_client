@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../model/recommend_model.dart';
 
-class RecommendResult extends StatelessWidget {
-  RecommendResult({Key? key}) : super(key: key);
+class ClothRecommendResult extends StatelessWidget {
+  ClothRecommendResult({Key? key}) : super(key: key);
 
   Future<List<RecommendModel>> coordis = ApiService.getAiCoordination();
 
