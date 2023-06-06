@@ -1,5 +1,5 @@
 import 'package:crush_client/closet/model/cloth_model.dart';
-import 'package:crush_client/closet/view/cloth_recommend/cloth_recommend_page.dart';
+import 'package:crush_client/closet/view/cloth_recommend/cloth_recommend_result.dart';
 import 'package:crush_client/common/const/colors.dart';
 import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/repositories/repositories.dart';
@@ -111,7 +111,7 @@ class _ClosetPageState extends State<ClosetPage>
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RecommendPage()),
+                      MaterialPageRoute(builder: (context) => RecommendResult()),
                     );
                   },
                   child: Padding(

@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:crush_client/closet/model/coordination_model.dart';
+import 'package:crush_client/closet/model/recommend_model.dart';
 import 'package:dio/dio.dart';
 
 class ApiService {
-  //check the platform and chosse to loopbak ip
-  static final androidIp = '10.0.2.2';
-  static final iosIp = '127.0.0.1';
+  // check the platform and chosse to loopbak ip
+  static const androidIp = '10.0.2.2';
+  static const iosIp = '127.0.0.1';
   static final ip = Platform.isAndroid ? androidIp : iosIp;
 
   static String baseUrl = "http://52.78.216.153";
@@ -24,15 +24,16 @@ class ApiService {
       "occasion": "casual",
       "season": "spring",
       "style": "sporty"
-    }
+    },
   };
 
-  static Future<List<CoordinationModel>> getAiCoordination() async {
+  static Future<List<RecommendModel>> getAiCoordination() async {
     print(data);
-    List<CoordinationModel> coordinationInstances = [];
+    List<RecommendModel> coordinationInstances = [];
     final dio = Dio();
     final response = await dio.post(
-      '$baseUrl/$recommend',
+      //'$baseUrl/$recommend',
+      'http://$ip:8080/$recommend',
       data: data,
       options: Options(
         contentType: 'application/json',
@@ -42,7 +43,7 @@ class ApiService {
       final List<dynamic> aiCoordis = jsonDecode(response.data);
       for (var aiCoordi in aiCoordis) {
         List<String> aiCoordi_string = [for (var e in aiCoordi) e.toString()];
-        coordinationInstances.add(CoordinationModel.fromList(aiCoordi_string));
+        coordinationInstances.add(RecommendModel.fromList(aiCoordi_string));
       }
       return coordinationInstances;
     }

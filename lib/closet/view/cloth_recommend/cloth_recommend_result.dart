@@ -1,12 +1,12 @@
 import 'package:crush_client/closet/services/api_service.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/coordination_model.dart';
+import '../../model/recommend_model.dart';
 
-class RecommendPage extends StatelessWidget {
-  RecommendPage({Key? key}) : super(key: key);
+class RecommendResult extends StatelessWidget {
+  RecommendResult({Key? key}) : super(key: key);
 
-  Future<List<CoordinationModel>> coordis = ApiService.getAiCoordination();
+  Future<List<RecommendModel>> coordis = ApiService.getAiCoordination();
 
   @override
   Widget build(BuildContext context) {
