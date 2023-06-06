@@ -5,14 +5,13 @@ import 'package:crush_client/closet/model/recommend_model.dart';
 import 'package:dio/dio.dart';
 
 class ApiService {
-  // check the platform and chosse to loopbak ip
+  // check the platform and choose the localhost ip
   static const androidIp = '10.0.2.2';
   static const iosIp = '127.0.0.1';
   static final ip = Platform.isAndroid ? androidIp : iosIp;
-
-  static String baseUrl = "http://52.78.216.153";
+  
   static const String recommend = "recommend";
-  static const data = {
+  static const clothRecRequest = {
     "cloths": [
       {"name": "옷1", "color": "빨강", "type": "티셔츠", "thickness": "두꺼움"},
       {"name": "자라", "color": "파랑", "type": "바지", "thickness": "얇음"},
@@ -28,13 +27,13 @@ class ApiService {
   };
 
   static Future<List<RecommendModel>> getAiCoordination() async {
-    print(data);
+    print(clothRecRequest);
     List<RecommendModel> coordinationInstances = [];
     final dio = Dio();
     final response = await dio.post(
       //'$baseUrl/$recommend',
       'http://$ip:8080/$recommend',
-      data: data,
+      data: clothRecRequest,
       options: Options(
         contentType: 'application/json',
       ),

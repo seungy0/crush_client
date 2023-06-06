@@ -15,8 +15,8 @@ class Cloth {
 
   factory Cloth.fromJson(Map<String, dynamic> json) {
     return Cloth(
-      clothId: json['clothId'] ?? 'No ClothId',
-      name: json['name'] ?? 'No Name',
+      clothId: json['clothId'] ?? 'NoClothId',
+      name: json['name'] ?? 'NoName',
       color: json['color'],
       type: json['type'],
       thickness: json['thickness'],

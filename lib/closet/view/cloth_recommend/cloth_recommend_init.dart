@@ -10,9 +10,10 @@ class ClothRecommendInit extends StatefulWidget {
 }
 
 class _ClothRecommendInitState extends State<ClothRecommendInit> {
-  String form1Value = '맑음';
-  String form2Value = '캐주얼';
-  String form3Value = '활기찬';
+  String weatherValue = '맑음';
+  String occasionValue = '캐주얼';
+  String styleValue = '활기찬';
+  String seasonValue = '봄';
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +27,16 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CustomDropdown(
-                  value: form1Value,
+                  value: weatherValue,
                   items: const ['흐림', '맑음', '비', '눈', '눈보라', '소나기'],
                   onChanged: (String? newValue) {
                     setState(() {
-                      form1Value = newValue!;
+                      weatherValue = newValue!;
                     });
                   },
                 ),
                 CustomDropdown(
-                  value: form2Value,
+                  value: occasionValue,
                   items: const [
                     '캐주얼',
                     '비즈니스 캐주얼',
@@ -44,16 +45,25 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                   ],
                   onChanged: (String? newValue) {
                     setState(() {
-                      form2Value = newValue!;
+                      occasionValue = newValue!;
                     });
                   },
                 ),
                 CustomDropdown(
-                  value: form3Value,
+                  value: styleValue,
                   items: const ['활기찬', '생동감', '어두운', '명랑한', '우아한', '세련된', '편안한'],
                   onChanged: (String? newValue) {
                     setState(() {
-                      form3Value = newValue!;
+                      styleValue = newValue!;
+                    });
+                  },
+                ),
+                CustomDropdown(
+                  value: seasonValue,
+                  items: const ['봄', '여름', '가을', '겨울'],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      seasonValue = newValue!;
                     });
                   },
                 ),
@@ -69,9 +79,10 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 //print form1Value
-                Text(form1Value),
-                Text(form2Value),
-                Text(form3Value),
+                Text(weatherValue),
+                Text(occasionValue),
+                Text(styleValue),
+                Text(seasonValue),
               ],
             ),
             ElevatedButton(
