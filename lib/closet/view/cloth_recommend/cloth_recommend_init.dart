@@ -17,6 +17,7 @@ class ClothRecommendInit extends StatefulWidget {
 
 class _ClothRecommendInitState extends State<ClothRecommendInit> {
   late final FirestoreRepository _firestoreRepository;
+  Future<void>? future = Future.value(null);
   String userId = '';
 
   String weatherValue = '맑음';
@@ -38,150 +39,173 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
       helpContent: "나의 옷장에 등록된 옷을 기반으로,\nAI가 옷을 추천해드려요!\n\n"
           "날씨, 상황, 스타일, 계절을 선택하고\n옷 추천 받기를 눌러주세요.\n\n\n"
           "Tip. 각 드롭다운 버튼을 길게 누르면,\n원하는 항목을 직접 입력할 수 있어요.",
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6.0),
-                child: Column(
+      child: FutureBuilder<void>(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 20),
+                  Text("요청 처리중..."),
+                  SizedBox(height: 80),
+                ],
+              ),
+            );
+          } else {
+            return Stack(
+              children: [
+                Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CustomDropdown(
-                          value: weatherValue,
-                          items: const ['흐림', '맑음', '비', '눈', '눈보라', '소나기'],
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              weatherValue = newValue!;
-                            });
-                          },
-                        ),
-                        CustomDropdown(
-                          value: occasionValue,
-                          items: const [
-                            '캐주얼',
-                            '비즈니스 캐주얼',
-                            '세미포멀',
-                            '포멀',
-                          ],
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              occasionValue = newValue!;
-                            });
-                          },
-                        ),
-                        CustomDropdown(
-                          value: styleValue,
-                          items: const [
-                            '활기찬',
-                            '생동감',
-                            '어두운',
-                            '명랑한',
-                            '우아한',
-                            '세련된',
-                            '편안한'
-                          ],
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              styleValue = newValue!;
-                            });
-                          },
-                        ),
-                        CustomDropdown(
-                          value: seasonValue,
-                          items: const ['봄', '여름', '가을', '겨울'],
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              seasonValue = newValue!;
-                            });
-                          },
-                        ),
-                      ],
+                    Container(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CustomDropdown(
+                                value: weatherValue,
+                                items: const ['흐림', '맑음', '비', '눈', '눈보라', '소나기'],
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    weatherValue = newValue!;
+                                  });
+                                },
+                              ),
+                              CustomDropdown(
+                                value: occasionValue,
+                                items: const [
+                                  '캐주얼',
+                                  '비즈니스 캐주얼',
+                                  '세미포멀',
+                                  '포멀',
+                                ],
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    occasionValue = newValue!;
+                                  });
+                                },
+                              ),
+                              CustomDropdown(
+                                value: styleValue,
+                                items: const [
+                                  '활기찬',
+                                  '생동감',
+                                  '어두운',
+                                  '명랑한',
+                                  '우아한',
+                                  '세련된',
+                                  '편안한'
+                                ],
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    styleValue = newValue!;
+                                  });
+                                },
+                              ),
+                              CustomDropdown(
+                                value: seasonValue,
+                                items: const ['봄', '여름', '가을', '겨울'],
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    seasonValue = newValue!;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: Colors.grey[300],
+                          ),
+                        ],
+                      ),
                     ),
-                    Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.grey[300],
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          //mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 30),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 30),
+                              child: Text(
+                                "안녕하세요,\n오늘 어울리는 옷을\n추천해드릴게요\n",
+                                style: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.w900),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(width: 38),
+                                Text(weatherValue,
+                                    style: const TextStyle(
+                                        fontSize: 25, fontWeight: FontWeight.w500)),
+                                renderDot(),
+                                Text(occasionValue,
+                                    style: const TextStyle(
+                                        fontSize: 25, fontWeight: FontWeight.w500)),
+                                renderDot(),
+                                Text(styleValue,
+                                    style: const TextStyle(
+                                        fontSize: 25, fontWeight: FontWeight.w500)),
+                                renderDot(),
+                                Text(seasonValue,
+                                    style: const TextStyle(
+                                        fontSize: 25, fontWeight: FontWeight.w500)),
+                              ],
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Image.asset(
+                                'assets/bg_main.png',
+                                fit: BoxFit.cover,
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 0.6,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 30),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 30),
-                        child: Text(
-                          "안녕하세요,\n오늘 어울리는 옷을\n추천해드릴게요\n",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w900),
-                          textAlign: TextAlign.left,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height * 0.05),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          future = _fetchAiCoordinationAndNavigate(context);
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PRIMARY_COLOR,
+                      ),
+                      child: const Text(
+                        "옷 추천 받기",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: 38),
-                          Text(weatherValue,
-                              style: const TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w500)),
-                          renderDot(),
-                          Text(occasionValue,
-                              style: const TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w500)),
-                          renderDot(),
-                          Text(styleValue,
-                              style: const TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w500)),
-                          renderDot(),
-                          Text(seasonValue,
-                              style: const TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.w500)),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Image.asset(
-                          'assets/bg_main.png',
-                          fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.6,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.05),
-              child: ElevatedButton(
-                onPressed: () => _fetchAiCoordinationAndNavigate(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: PRIMARY_COLOR,
-                ),
-                child: const Text(
-                  "옷 추천 받기",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+              ],
+            );
+          }
+        },
       ),
     );
   }
@@ -201,9 +225,7 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            ClothRecommendResult(
-                recommendations: recommendations
-            ),
+            ClothRecommendResult(recommendations: recommendations),
       ),
     );
   }
