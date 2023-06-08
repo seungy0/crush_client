@@ -10,7 +10,7 @@ class ThickSelection extends StatefulWidget {
 }
 
 class _ThickSelectionState extends State<ThickSelection> {
-  String selectedThickName = '두꺼움';
+  String selectedThickName = '보통';
 
   final List<Map<String, dynamic>> Thicks = [
     {'name': '두꺼움'},

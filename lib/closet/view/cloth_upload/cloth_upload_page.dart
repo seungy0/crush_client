@@ -12,16 +12,16 @@ import 'package:image_picker/image_picker.dart';
 
 class ClothInput extends StatefulWidget {
   @override
-  _ClothInputState createState() => _ClothInputState();
+  ClothInputState createState() => ClothInputState();
 }
 
-class _ClothInputState extends State<ClothInput> {
+class ClothInputState extends State<ClothInput> {
   final ClothKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
   String name = '';
-  String color = '';
-  String type = '';
-  String thickness = '';
+  String color = '검정';
+  String type = '티셔츠';
+  String thickness = '보통';
   XFile? _imageFile;
   Color selectedColor = Colors.white;
 

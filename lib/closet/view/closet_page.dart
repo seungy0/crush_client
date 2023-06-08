@@ -208,7 +208,7 @@ class _ClosetPageState extends State<ClosetPage>
                                         borderRadius: BorderRadius.circular(32.0),
                                         child: Image.network(
                                           imageUrl,
-                                          fit: BoxFit.contain,
+                                          fit: BoxFit.cover,
                                           width: MediaQuery.of(context).size.width,
                                           height: MediaQuery.of(context).size.height * 0.55,
                                         ),

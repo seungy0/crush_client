@@ -6,10 +6,10 @@ class ColorSelection extends StatefulWidget {
   const ColorSelection({Key? key, required this.onSaved}) : super(key: key);
 
   @override
-  _ColorSelectionState createState() => _ColorSelectionState();
+  ColorSelectionState createState() => ColorSelectionState();
 }
 
-class _ColorSelectionState extends State<ColorSelection> {
+class ColorSelectionState extends State<ColorSelection> {
   String selectedColorName = '검정';
 
   final List<Map<String, dynamic>> colors = [
@@ -25,7 +25,7 @@ class _ColorSelectionState extends State<ColorSelection> {
     {'name': '회색', 'color': Colors.grey},
     {'name': '하양', 'color': Colors.white},
     {'name': '갈색', 'color': Colors.brown},
-    {'name': '라임', 'color': Colors.lime},
+    {'name': '베이지', 'color': const Color.fromRGBO(243,207,152, 1.0) },
     {'name': '청록', 'color': Colors.cyan},
     {'name': '자주', 'color': Colors.deepPurple},
   ];
@@ -80,7 +80,7 @@ class _ColorSelectionState extends State<ColorSelection> {
                   runSpacing: 8.0,
                   children: colors.map((color) {
                     return SizedBox(
-                      width: 60.0,
+                      width: 65.0,
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
