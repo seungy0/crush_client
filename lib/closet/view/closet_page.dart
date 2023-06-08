@@ -406,11 +406,14 @@ class _ClosetPageState extends State<ClosetPage>
                 },
                 child: Column(
                   children: [
-                    Image.network(
-                      imageUrl.isEmpty ? defaultImage : imageUrl,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image.network(
+                        imageUrl.isEmpty ? defaultImage : imageUrl,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.width * 0.35,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(cloth.name,

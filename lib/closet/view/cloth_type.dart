@@ -6,10 +6,10 @@ class TypeSelection extends StatefulWidget {
   const TypeSelection({Key? key, required this.onSaved}) : super(key: key);
 
   @override
-  _TypeSelectionState createState() => _TypeSelectionState();
+  TypeSelectionState createState() => TypeSelectionState();
 }
 
-class _TypeSelectionState extends State<TypeSelection> {
+class TypeSelectionState extends State<TypeSelection> {
   String selectedTypeName = '티셔츠';
 
   final List<Map<String, dynamic>> Types = [
