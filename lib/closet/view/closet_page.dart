@@ -111,8 +111,8 @@ class _ClosetPageState extends State<ClosetPage>
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ClothRecommendInit()
-                      ),
+                      MaterialPageRoute(
+                          builder: (context) => ClothRecommendInit()),
                     );
                   },
                   child: Padding(
@@ -146,6 +146,8 @@ class _ClosetPageState extends State<ClosetPage>
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return SafeArea(
+          top: true,
+          bottom: false,
           child: Center(
             child: Container(
               decoration: const BoxDecoration(
@@ -174,19 +176,7 @@ class _ClosetPageState extends State<ClosetPage>
                         ),
                       ),
                     ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      cloth.name,
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
-                    ),
-                  ),
+                  ), // 뒤로 버튼
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -196,8 +186,7 @@ class _ClosetPageState extends State<ClosetPage>
                           Center(
                             child: FutureBuilder<String?>(
                               future:
-                                  RepositoryProvider.of<FirestoreRepository>(
-                                          context)
+                                  RepositoryProvider.of<FirestoreRepository>(context)
                                       .getImageByClothId(
                                 uid: RepositoryProvider.of<
                                         AuthenticationRepository>(context)
@@ -207,49 +196,126 @@ class _ClosetPageState extends State<ClosetPage>
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
+                                  return const Center(
+                                      child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  final imageUrl =
-                                      snapshot.data ?? defaultImage;
-                                  return Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.5,
-                                  );
+                                  final imageUrl = snapshot.data ?? defaultImage;
+                                  return Stack(
+                                    children: <Widget>[
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(32.0),
+                                        child: Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.contain,
+                                          width: MediaQuery.of(context).size.width,
+                                          height: MediaQuery.of(context).size.height * 0.55,
+                                        ),
+                                      ),
+                                      Positioned.fill(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(32.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.black26,
+                                                width: 2,
+                                              ),
+                                              borderRadius: BorderRadius.circular(32.0),
+                                              color: Colors.transparent,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ); //이미지
                                 }
                               },
                             ),
                           ),
-                          const SizedBox(height: 10.0),
-                          Text(
-                            cloth.type,
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.black,
-                              decoration: TextDecoration.none,
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              cloth.name,
+                              style: const TextStyle(
+                                fontSize: 35.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.none,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 10.0),
-                          Text(
-                            cloth.color,
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.black,
-                              decoration: TextDecoration.none,
-                            ),
+                          Row(
+                            children: [
+                              const SizedBox(width: 16.0),
+                              const Text(
+                                '종류  ',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                              //const SizedBox(width: 8.0),
+                              Text(
+                                cloth.type,
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 10.0),
-                          Text(
-                            cloth.thickness,
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.black,
-                              decoration: TextDecoration.none,
-                            ),
+                          Row(
+                            children: [
+                              const SizedBox(width: 16.0),
+                              const Text(
+                                '색상  ',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                              //const SizedBox(width: 8.0),
+                              Text(
+                                cloth.color,
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10.0),
+                          Row(
+                            children: [
+                              const SizedBox(width: 16.0),
+                              const Text(
+                                '두께  ',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                              Text(
+                                cloth.thickness,
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.black,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -257,7 +323,7 @@ class _ClosetPageState extends State<ClosetPage>
                   ),
                   const SizedBox(height: 16.0),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -281,6 +347,7 @@ class _ClosetPageState extends State<ClosetPage>
                                 TextStyle(fontSize: 18.0, color: Colors.blue),
                           ),
                         ),
+                        const SizedBox(width: 16.0),
                       ],
                     ),
                   ),
@@ -306,8 +373,10 @@ class _ClosetPageState extends State<ClosetPage>
 
   /// widget that show Clothes by type
   Widget _buildClothesGridView(List<Cloth> clothes) {
-    final firestoreRepository = RepositoryProvider.of<FirestoreRepository>(context);
-    const defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
+    final firestoreRepository =
+        RepositoryProvider.of<FirestoreRepository>(context);
+    const defaultImage =
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrVqTt0O2Wb_AijJ2MgpH162DTExM55h0Wmg&usqp=CAU';
 
     return GridView.builder(
       itemCount: clothes.length,
@@ -319,12 +388,13 @@ class _ClosetPageState extends State<ClosetPage>
 
         return FutureBuilder<String?>(
           future: firestoreRepository.getImageByClothId(
-            uid: RepositoryProvider.of<AuthenticationRepository>(context).currentUser,
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
+                .currentUser,
             clothId: cloth.clothId,
           ),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
@@ -334,25 +404,23 @@ class _ClosetPageState extends State<ClosetPage>
                 onTap: () {
                   _showClothDialog(context, cloth);
                 },
-                child: Container(
-                  child: Column(
-                    children: [
-                      Image.network(
-                        imageUrl.isEmpty ? defaultImage : imageUrl,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(cloth.name),
-                          Text(' '),
-                          Text(cloth.type),
-                        ],
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    Image.network(
+                      imageUrl.isEmpty ? defaultImage : imageUrl,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(cloth.name,
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis),
+                    Text(cloth.type),
+                  ],
                 ),
               );
             }
@@ -363,15 +431,14 @@ class _ClosetPageState extends State<ClosetPage>
   }
 
   Widget _buildClothesByType(String type) {
-    final firestoreRepository = RepositoryProvider.of<FirestoreRepository>(
-        context);
+    final firestoreRepository =
+        RepositoryProvider.of<FirestoreRepository>(context);
 
     if (type == '전체') {
       return Expanded(
         child: StreamBuilder<List<Cloth>>(
           stream: firestoreRepository.getClothStream(
-            uid: RepositoryProvider
-                .of<AuthenticationRepository>(context)
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
                 .currentUser,
           ),
           builder: (context, clothList) {
@@ -404,8 +471,7 @@ class _ClosetPageState extends State<ClosetPage>
       return Expanded(
         child: StreamBuilder<List<Cloth>>(
           stream: firestoreRepository.getClothStream(
-            uid: RepositoryProvider
-                .of<AuthenticationRepository>(context)
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
                 .currentUser,
           ),
           builder: (context, clothList) {
@@ -416,8 +482,9 @@ class _ClosetPageState extends State<ClosetPage>
               return const Center(child: CircularProgressIndicator());
             }
 
-            final filteredClothes = clothList.data!.where((cloth) =>
-                topClothTypes.contains(cloth.type)).toList();
+            final filteredClothes = clothList.data!
+                .where((cloth) => topClothTypes.contains(cloth.type))
+                .toList();
 
             return _buildClothesGridView(filteredClothes);
           },
@@ -433,8 +500,7 @@ class _ClosetPageState extends State<ClosetPage>
       return Expanded(
         child: StreamBuilder<List<Cloth>>(
           stream: firestoreRepository.getClothStream(
-            uid: RepositoryProvider
-                .of<AuthenticationRepository>(context)
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
                 .currentUser,
           ),
           builder: (context, clothList) {
@@ -445,8 +511,9 @@ class _ClosetPageState extends State<ClosetPage>
               return const Center(child: CircularProgressIndicator());
             }
 
-            final filteredClothes = clothList.data!.where((cloth) =>
-                bottomClothTypes.contains(cloth.type)).toList();
+            final filteredClothes = clothList.data!
+                .where((cloth) => bottomClothTypes.contains(cloth.type))
+                .toList();
 
             return _buildClothesGridView(filteredClothes);
           },
@@ -461,8 +528,7 @@ class _ClosetPageState extends State<ClosetPage>
       return Expanded(
         child: StreamBuilder<List<Cloth>>(
           stream: firestoreRepository.getClothStream(
-            uid: RepositoryProvider
-                .of<AuthenticationRepository>(context)
+            uid: RepositoryProvider.of<AuthenticationRepository>(context)
                 .currentUser,
           ),
           builder: (context, clothList) {
@@ -473,8 +539,9 @@ class _ClosetPageState extends State<ClosetPage>
               return const Center(child: CircularProgressIndicator());
             }
 
-            final filteredClothes = clothList.data!.where((cloth) =>
-                anyClothTypes.contains(cloth.type)).toList();
+            final filteredClothes = clothList.data!
+                .where((cloth) => anyClothTypes.contains(cloth.type))
+                .toList();
 
             return _buildClothesGridView(filteredClothes);
           },
@@ -482,5 +549,4 @@ class _ClosetPageState extends State<ClosetPage>
       );
     }
   }
-
 }
