@@ -35,6 +35,9 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: "AI 옷 추천",
+      helpContent: "나의 옷장에 등록된 옷을 기반으로,\nAI가 옷을 추천해드려요!\n\n"
+          "날씨, 상황, 스타일, 계절을 선택하고\n옷 추천 받기를 눌러주세요.\n\n\n"
+          "Tip. 각 드롭다운 버튼을 길게 누르면,\n원하는 항목을 직접 입력할 수 있어요.",
       child: Stack(
         children: [
           Column(
