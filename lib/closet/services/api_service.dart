@@ -19,6 +19,8 @@ class ApiService {
     required String occasion,
     required String season,
     required String style,
+    required String age,
+    required String sex,
   }) async {
     final clothRecRequest = {
       "cloths": cloths.map((cloth) =>{
@@ -31,7 +33,9 @@ class ApiService {
         "weather": weather,
         "occasion": occasion,
         "season": season,
-        "style": style
+        "style": style,
+        "age" : age,
+        "sex" : sex,
       },
     };
 

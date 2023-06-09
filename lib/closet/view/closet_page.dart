@@ -404,26 +404,28 @@ class _ClosetPageState extends State<ClosetPage>
                 onTap: () {
                   _showClothDialog(context, cloth);
                 },
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12.0),
-                      child: Image.network(
-                        imageUrl.isEmpty ? defaultImage : imageUrl,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        height: MediaQuery.of(context).size.width * 0.35,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(cloth.name,
-                        style: const TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w600,
+                child: Expanded(
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Image.network(
+                          imageUrl.isEmpty ? defaultImage : imageUrl,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          height: MediaQuery.of(context).size.width * 0.35,
+                          fit: BoxFit.cover,
                         ),
-                        overflow: TextOverflow.ellipsis),
-                    Text(cloth.type),
-                  ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(cloth.name,
+                          style: const TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis),
+                      Text(cloth.type),
+                    ],
+                  ),
                 ),
               );
             }

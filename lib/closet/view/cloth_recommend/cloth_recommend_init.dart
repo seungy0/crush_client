@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cloth_recommend_result.dart';
 
 class ClothRecommendInit extends StatefulWidget {
+
   const ClothRecommendInit({Key? key}) : super(key: key);
 
   @override
@@ -17,8 +18,16 @@ class ClothRecommendInit extends StatefulWidget {
 
 class _ClothRecommendInitState extends State<ClothRecommendInit> {
   late final FirestoreRepository _firestoreRepository;
+  late final AuthenticationRepository authRepo;
+
   Future<void>? future = Future.value(null);
+  Future<void>? _loadFuture;
+
   String userId = '';
+  String userName = '';
+  int userAge = 25;
+  String userSex = '남성';
+
 
   String weatherValue = '맑음';
   String occasionValue = '캐주얼';
@@ -30,15 +39,27 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
     super.initState();
     _firestoreRepository = RepositoryProvider.of<FirestoreRepository>(context);
     userId = context.read<AuthenticationRepository>().currentUser;
+    authRepo = RepositoryProvider.of<AuthenticationRepository>(context);
+    _loadFuture = _getUserInfo();
+  }
+
+  Future<void> _getUserInfo() async {
+    userName = await authRepo.currentUserName;
+    userAge = await authRepo.currentUserAge;
+    userSex = await authRepo.currentUserSex;
+    setState(() {
+      userSex = userSex == 'male' ? '남성' : '여성';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: "AI 옷 추천",
-      helpContent: "나의 옷장에 등록된 옷을 기반으로,\nAI가 옷을 추천해드려요!\n\n"
+      helpContent: "나의 옷장에 등록된 옷을 기반으로, AI가 옷을 추천해드려요!\n\n"
           "날씨, 상황, 스타일, 계절을 선택하고\n옷 추천 받기를 눌러주세요.\n\n\n"
-          "Tip. 각 드롭다운 버튼을 길게 누르면,\n원하는 항목을 직접 입력할 수 있어요.",
+          "Tip. 각 드롭다운 버튼을 길게 누르면,\n원하는 항목을 직접 입력할 수 있어요.\n\n"
+          "Tip. 설정에서 이름, 성별, 나이를 변경할 수 있어요.",
       child: FutureBuilder<void>(
         future: future,
         builder: (context, snapshot) {
@@ -132,11 +153,11 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 30),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 30),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 30),
                               child: Text(
-                                "안녕하세요,\n오늘 어울리는 옷을\n추천해드릴게요\n",
-                                style: TextStyle(
+                                "안녕하세요 $userName 님, \n오늘 어울리는 옷을\n추천해드릴게요\n",
+                                style: const TextStyle(
                                     fontSize: 30, fontWeight: FontWeight.w900),
                                 textAlign: TextAlign.left,
                               ),
@@ -160,6 +181,16 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                                 Text(seasonValue,
                                     style: const TextStyle(
                                         fontSize: 25, fontWeight: FontWeight.w500)),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(width: 38),
+                                Text("$userAge세, $userSex",
+                                    style: const TextStyle(
+                                        fontSize: 13, fontWeight: FontWeight.w500)),
                               ],
                             ),
                             Align(
@@ -189,14 +220,14 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: PRIMARY_COLOR,
+                        backgroundColor: Color(0xFFFFB500),
                       ),
                       child: const Text(
                         "옷 추천 받기",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF805A01),
                           fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),
@@ -218,6 +249,8 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
       occasion: occasionValue,
       style: styleValue,
       season: seasonValue,
+      age: userAge.toString(),
+      sex: userSex,
     );
 
     if (!context.mounted) return;
