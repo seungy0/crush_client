@@ -42,6 +42,7 @@ class _ClosetPageState extends State<ClosetPage>
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '나의 옷장',
+      helpContent:  "hhhhh",
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -471,6 +472,7 @@ class _ClosetPageState extends State<ClosetPage>
         '롱코트',
         '패딩',
         '바람막이',
+        '상의',
       ];
 
       return Expanded(
@@ -500,6 +502,7 @@ class _ClosetPageState extends State<ClosetPage>
         '청바지',
         '슬랙스',
         '조거팬츠',
+        '하의',
       ];
 
       return Expanded(
@@ -528,6 +531,8 @@ class _ClosetPageState extends State<ClosetPage>
       final anyClothTypes = [
         '신발',
         '안경',
+        '액세서리',
+        '기타',
       ];
 
       return Expanded(

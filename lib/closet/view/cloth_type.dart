@@ -14,21 +14,25 @@ class TypeSelectionState extends State<TypeSelection> {
 
   final List<Map<String, dynamic>> Types = [
     {'name': '티셔츠'},
+드    {'name': '상의'},
     {'name': '맨투맨'},
     {'name': '후드티'},
     {'name': '셔츠'},
     {'name': '니트'},
-    {'name': '카디건'},
+    {'name': '가디건'},
     {'name': '자켓'},
     {'name': '블레이저'},
     {'name': '롱코트'},
     {'name': '패딩'},
     {'name': '바람막이'},
+    {'name': '하의'},
     {'name': '청바지'},
     {'name': '슬랙스'},
     {'name': '조거팬츠'},
+    {'name': '액세서리'},
     {'name': '신발'},
     {'name': '안경'},
+    {'name': '기타'},
   ];
 
   bool showTypePicker = false;

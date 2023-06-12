@@ -25,7 +25,7 @@ class ClothRecommendResult extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemBuilder: (context, index) {
                 var item = recommendations[index];
-                String clothes = item.clothes.join(", ");
+                String clothes = item.clothes.join("\n");
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -48,6 +48,9 @@ class ClothRecommendResult extends StatelessWidget {
                             ),
                             textAlign: TextAlign.center,
                           ),
+                          const SizedBox(
+                            height: 15,
+                          ),
                           Text(
                             clothes,
                             style: const TextStyle(
@@ -64,6 +67,7 @@ class ClothRecommendResult extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 20,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
