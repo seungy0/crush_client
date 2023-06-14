@@ -42,7 +42,9 @@ class _ClosetPageState extends State<ClosetPage>
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '나의 옷장',
-      helpContent:  "hhhhh",
+      helpContent:  "내가 가진 옷을 가상 옷장에 등록해보세요!\n"
+                    "가상 옷장에 등록된 옷들을 바탕으로\n"
+                    "나에게 어울리는 옷을 추천해드립니다.",
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

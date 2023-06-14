@@ -5,6 +5,7 @@ import 'package:crush_client/common/layout/default_layout.dart';
 import 'package:crush_client/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_player/video_player.dart';
 
 import 'cloth_recommend_result.dart';
 
@@ -19,6 +20,7 @@ class ClothRecommendInit extends StatefulWidget {
 class _ClothRecommendInitState extends State<ClothRecommendInit> {
   late final FirestoreRepository _firestoreRepository;
   late final AuthenticationRepository authRepo;
+  late VideoPlayerController _controller;
 
   Future<void>? future = Future.value(null);
   Future<void>? _loadFuture;
@@ -41,6 +43,19 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
     userId = context.read<AuthenticationRepository>().currentUser;
     authRepo = RepositoryProvider.of<AuthenticationRepository>(context);
     _loadFuture = _getUserInfo();
+
+    _controller = VideoPlayerController.asset('assets/loading.mp4')
+      ..initialize().then((_) {
+        _controller.play();
+        _controller.setLooping(true);
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   Future<void> _getUserInfo() async {
@@ -64,16 +79,31 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 20),
-                  Text("요청 처리중..."),
-                  SizedBox(height: 80),
-                ],
-              ),
+            return Stack(
+              children: [
+                SizedBox.expand(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _controller.value.size.width,
+                      height: _controller.value.size.height,
+                      child: VideoPlayer(_controller),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 20),
+                      Text("요청 처리중..."),
+                      SizedBox(height: 80),
+                    ],
+                  ),
+                  //비디오
+                ),
+              ],
             );
           } else {
             return Stack(
