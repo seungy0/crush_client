@@ -14,7 +14,7 @@ class TypeSelectionState extends State<TypeSelection> {
 
   final List<Map<String, dynamic>> Types = [
     {'name': '티셔츠'},
-드    {'name': '상의'},
+    {'name': '상의'},
     {'name': '맨투맨'},
     {'name': '후드티'},
     {'name': '셔츠'},

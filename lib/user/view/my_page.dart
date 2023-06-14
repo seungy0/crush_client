@@ -34,6 +34,7 @@ class _MyPageState extends State<MyPage> {
     final name = await widget.authRepo.currentUserName;
     final age = await widget.authRepo.currentUserAge;
     final sex = await widget.authRepo.currentUserSex;
+
     setState(() {
       _nameController.text = name;
       _ageController.text = age.toString();
