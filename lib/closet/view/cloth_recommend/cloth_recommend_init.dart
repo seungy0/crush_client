@@ -31,7 +31,7 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
 
   String weatherValue = '맑음';
   String occasionValue = '캐주얼';
-  String styleValue = '활기찬';
+  String styleValue = '모던한';
   String seasonValue = '봄';
 
   @override
@@ -89,7 +89,7 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                             children: [
                               CustomDropdown(
                                 value: weatherValue,
-                                items: const ['흐림', '맑음', '비', '눈', '눈보라', '소나기'],
+                                items: const ['흐림', '맑음', '비', '눈', '무더움', '추움'],
                                 onChanged: (String? newValue) {
                                   setState(() {
                                     weatherValue = newValue!;
@@ -100,7 +100,7 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                                 value: occasionValue,
                                 items: const [
                                   '캐주얼',
-                                  '비즈니스 캐주얼',
+                                  '비즈니스',
                                   '세미포멀',
                                   '포멀',
                                 ],
@@ -113,13 +113,17 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                               CustomDropdown(
                                 value: styleValue,
                                 items: const [
-                                  '활기찬',
-                                  '생동감',
-                                  '어두운',
-                                  '명랑한',
+                                  '모던한',
+                                  '귀여운',
+                                  '온화한',
+                                  '경쾌한',
+                                  '내츄럴한',
+                                  '은은한',
+                                  '화려한',
                                   '우아한',
-                                  '세련된',
-                                  '편안한'
+                                  '다이나믹한',
+                                  '점잖은',
+                                  '고상한',
                                 ],
                                 onChanged: (String? newValue) {
                                   setState(() {
