@@ -97,11 +97,27 @@ class _ClothRecommendInitState extends State<ClothRecommendInit> {
                     children: const [
                       CircularProgressIndicator(),
                       SizedBox(height: 20),
-                      Text("요청 처리중..."),
+                      Text.rich(
+                        TextSpan(
+                          text: "사용자님의 옷을 확인하고 있어요!\n",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(3, 3),
+                                color: Colors.black,
+                                blurRadius: 50,
+                              ),
+                            ],
+                          ),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                       SizedBox(height: 80),
                     ],
                   ),
-                  //비디오
                 ),
               ],
             );
